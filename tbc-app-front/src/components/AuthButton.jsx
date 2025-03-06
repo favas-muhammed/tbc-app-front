@@ -5,7 +5,7 @@ const AuthButton = ({ onClick }) => {
     window.location.href = "/auth/gmail";
   };
 
-  return <button onClick={onClick}>Authenticate with Gmail</button>;
+  return <button onClick={onClick}>Login</button>;
 };
 
 export default AuthButton;

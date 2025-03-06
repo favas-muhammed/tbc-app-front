@@ -21,6 +21,7 @@ function App() {
       const token = new URLSearchParams(hash.substring(1)).get("access_token");
       if (token) {
         localStorage.setItem("gmailAccessToken", token); // Store the token
+        console.log(token); // Log the access token for debugging
         fetchEmails(); // Call the function to fetch emails after successful login
         window.location.href = "/"; // Redirect to home after successful login
       }
@@ -38,6 +39,8 @@ function App() {
       }
     );
     const data = await response.json();
+    console.log(data); // Log the fetched emails for now
+
     console.log(data); // Log the fetched emails for now
   };
 

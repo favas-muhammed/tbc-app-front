@@ -15,7 +15,20 @@ const EmailList = () => {
         }
       );
       const data = await response.json();
-      setEmails(data.messages || []); // Store the fetched emails
+      const emailDetails = await Promise.all(
+        data.messages.map(async (email) => {
+          const emailResponse = await fetch(
+            `https://www.googleapis.com/gmail/v1/users/me/messages/${email.id}`,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
+          return await emailResponse.json();
+        })
+      );
+      setEmails(emailDetails); // Store the fetched email details
     };
 
     fetchEmails();
@@ -23,10 +36,10 @@ const EmailList = () => {
 
   return (
     <div>
-      <h1>Email List</h1>
+      <h1>Inbox</h1>
       <ul>
         {emails.map((email) => (
-          <li key={email.id}>{email.id}</li> // Display email IDs for now
+          <li key={email.id}>{email.snippet}</li> // Display email snippets
         ))}
       </ul>
     </div>
