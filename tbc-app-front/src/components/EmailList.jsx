@@ -25,7 +25,14 @@ const EmailList = () => {
               },
             }
           );
-          return await emailResponse.json();
+          const emailData = await emailResponse.json();
+          const sender = emailData.payload.headers.find(
+            (header) => header.name === "From"
+          ).value;
+          const subject = emailData.payload.headers.find(
+            (header) => header.name === "Subject"
+          ).value;
+          return { id: email.id, sender, subject, snippet: emailData.snippet }; // Include sender and subject
         })
       );
       setEmails(emailDetails); // Store the fetched email details
@@ -39,7 +46,11 @@ const EmailList = () => {
       <h1>Inbox</h1>
       <ul>
         {emails.map((email) => (
-          <li key={email.id}>{email.snippet}</li> // Display email snippets
+          <li key={email.id}>
+            <strong>From:</strong> {email.sender} <br />
+            <strong>Subject:</strong> {email.subject} <br />
+            {email.snippet}
+          </li>
         ))}
       </ul>
     </div>
