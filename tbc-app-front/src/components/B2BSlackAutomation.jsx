@@ -23,7 +23,11 @@ const B2BSlackAutomation = () => {
   return (
     <div>
       <h1>B2B Slack Automation</h1>
-      {/* Additional content for B2B Slack Automation */}
+      <div className="request-box">
+        <h2>Access Request</h2>
+        <h2>Quote Request</h2>
+        <h2>New Sales</h2>
+      </div>
     </div>
   );
 };
