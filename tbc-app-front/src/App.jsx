@@ -1,11 +1,8 @@
 import React, { useEffect } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import AuthButton from "./components/AuthButton.jsx";
-import Navbar from "./components/Navbar.jsx";
 import EmailList from "./components/EmailList.jsx";
 import EmailDetail from "./components/EmailDetail.jsx";
-import B2BSlackAutomation from "./components/B2BSlackAutomation.jsx"; // Import the B2B component
-import B2CSlackAutomation from "./components/B2CSlackAutomation.jsx"; // Import the B2C component
 
 const CLIENT_ID =
   "514206722532-f3rnvl2mhreb5ndgcdcd0irrvtjp4u2g.apps.googleusercontent.com"; // Replace with your client ID
@@ -43,32 +40,16 @@ function App() {
     );
     const data = await response.json();
     console.log(data); // Log the fetched emails for now
-  };
 
-  const handleLogout = () => {
-    localStorage.removeItem("gmailAccessToken"); // Clear the access token
-    window.location.href = "/"; // Redirect to home after logout
+    console.log(data); // Log the fetched emails for now
   };
 
   return (
     <Router>
       <div>
-        <Navbar
-          onLoginClick={handleGmailAuth}
-          onLogoutClick={handleLogout}
-          onHomeClick={() => (window.location.href = "http://localhost:5173/")}
-          onToolsClick={() => {}}
-        />
+        <AuthButton onClick={handleGmailAuth} />
         <Routes>
           <Route path="/" element={<EmailList />} />
-          <Route
-            path="/b2b-slack-automation"
-            element={<B2BSlackAutomation />}
-          />
-          <Route
-            path="/b2c-slack-automation"
-            element={<B2CSlackAutomation />}
-          />
           <Route path="/email/:id" element={<EmailDetail />} />
           <Route
             path="/auth/gmail"

@@ -36,6 +36,7 @@ const EmailList = () => {
 
   return (
     <div>
+      <h1>Inbox</h1>
       <ul>
         {emails.map((email) => (
           <li key={email.id}>{email.snippet}</li> // Display email snippets
