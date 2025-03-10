@@ -1,8 +1,11 @@
 import React, { useEffect } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import AuthButton from "./components/AuthButton.jsx";
+import DropdownMenu from "./components/DropdownMenu.jsx";
+
 import EmailList from "./components/EmailList.jsx";
 import EmailDetail from "./components/EmailDetail.jsx";
+import B2BAutomations from "./pages/B2BAutomations.jsx";
 
 const CLIENT_ID =
   "514206722532-f3rnvl2mhreb5ndgcdcd0irrvtjp4u2g.apps.googleusercontent.com"; // Replace with your client ID
@@ -40,27 +43,34 @@ function App() {
     );
     const data = await response.json();
     console.log(data); // Log the fetched emails for now
-
-    console.log(data); // Log the fetched emails for now
   };
 
   return (
     <Router>
-      <div>
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+        }}
+      >
+        <DropdownMenu />
+        <h1 style={{ flexGrow: 1, textAlign: "center" }}>Velocity</h1>
+
         <AuthButton onClick={handleGmailAuth} />
-        <Routes>
-          <Route path="/" element={<EmailList />} />
-          <Route path="/email/:id" element={<EmailDetail />} />
-          <Route
-            path="/auth/gmail"
-            element={<div>Redirecting to Gmail...</div>}
-          />
-          <Route
-            path="/auth/callback"
-            element={<div>Handling callback...</div>}
-          />
-        </Routes>
       </div>
+
+      <Routes>
+        <Route path="/b2b-automations" element={<B2BAutomations />} />
+
+        <Route path="/" element={<EmailList />} />
+        <Route path="/email/:id" element={<EmailDetail />} />
+        <Route path="/auth/gmail" element={<div></div>} />
+        <Route
+          path="/auth/callback"
+          element={<div>Handling callback...</div>}
+        />
+      </Routes>
     </Router>
   );
 }

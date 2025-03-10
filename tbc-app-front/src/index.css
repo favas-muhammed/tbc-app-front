@@ -31,6 +31,9 @@ body {
 }
 
 h1 {
+  position: absolute;
+  left: 650px;
+  top: 0%;
   font-size: 3.2em;
   line-height: 1.1;
 }

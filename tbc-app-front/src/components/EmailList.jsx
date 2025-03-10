@@ -2,6 +2,9 @@ import React, { useEffect, useState } from "react";
 
 const EmailList = () => {
   const [emails, setEmails] = useState([]);
+  const emailListStyle = {
+    marginTop: "150px", // Add margin to push emails down
+  };
 
   useEffect(() => {
     const fetchEmails = async () => {
@@ -32,7 +35,14 @@ const EmailList = () => {
           const subject = emailData.payload.headers.find(
             (header) => header.name === "Subject"
           ).value;
-          return { id: email.id, sender, subject, snippet: emailData.snippet }; // Include sender and subject
+          const labels = emailData.labelIds; // Fetch labels for the email
+          return {
+            id: email.id,
+            sender,
+            subject,
+            snippet: emailData.snippet,
+            labels,
+          }; // Include sender, subject, and labels
         })
       );
       setEmails(emailDetails); // Store the fetched email details
@@ -42,13 +52,14 @@ const EmailList = () => {
   }, []);
 
   return (
-    <div>
-      <h1>Inbox</h1>
+    <div style={emailListStyle}>
       <ul>
         {emails.map((email) => (
           <li key={email.id}>
             <strong>From:</strong> {email.sender} <br />
             <strong>Subject:</strong> {email.subject} <br />
+            <strong>Labels:</strong> {email.labels.join(", ")} <br />{" "}
+            {/* Display labels */}
             {email.snippet}
           </li>
         ))}
