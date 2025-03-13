@@ -10,7 +10,8 @@ const EmailList = () => {
     const fetchEmails = async () => {
       const token = localStorage.getItem("gmailAccessToken");
       const response = await fetch(
-        "https://www.googleapis.com/gmail/v1/users/me/messages",
+        "https://www.googleapis.com/gmail/v1/users/me/messages?q=is:unread&maxResults=2000",
+
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -53,17 +54,26 @@ const EmailList = () => {
 
   return (
     <div style={emailListStyle}>
-      <ul>
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fill, minmax(250px, 1fr))",
+          gap: "10px",
+        }}
+      >
         {emails.map((email) => (
-          <li key={email.id}>
+          <div
+            key={email.id}
+            style={{ border: "1px solid #ccc", padding: "10px" }}
+          >
             <strong>From:</strong> {email.sender} <br />
             <strong>Subject:</strong> {email.subject} <br />
             <strong>Labels:</strong> {email.labels.join(", ")} <br />{" "}
             {/* Display labels */}
             {email.snippet}
-          </li>
+          </div>
         ))}
-      </ul>
+      </div>
     </div>
   );
 };

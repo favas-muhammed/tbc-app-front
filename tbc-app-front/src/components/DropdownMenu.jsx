@@ -8,6 +8,16 @@ const DropdownMenu = () => {
     top: "10px",
   };
 
+  const dropdownStyle = {
+    position: "absolute",
+    left: "10px",
+    top: "50px", // Increased this value to move the dropdown lower
+    border: "1px solid #ccc",
+    borderRadius: "4px",
+    padding: "10px",
+    zIndex: 1000,
+  };
+
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
 
@@ -27,23 +37,25 @@ const DropdownMenu = () => {
       </button>
 
       {isOpen && (
-        <div className="dropdown">
-          <ul style={{ display: isOpen ? "block" : "none" }}>
+        <div style={dropdownStyle}>
+          <ul style={{ listStyleType: "none", padding: 0, margin: 0 }}>
             <li
-              style={{ cursor: "pointer" }}
+              style={{ cursor: "pointer", padding: "5px 0" }}
               onClick={() => navigate("/b2b-automations")}
             >
               B2B Automations
             </li>
             <li
-              style={{ cursor: "pointer" }}
+              style={{ cursor: "pointer", padding: "5px 0" }}
               onClick={() => navigate("/b2c-automations")}
             >
               B2C Automations
             </li>
-
-            <li style={{ cursor: "default" }}>About</li>
-            <li style={{ cursor: "pointer" }} onClick={handleLogout}>
+            <li style={{ cursor: "default", padding: "5px 0" }}>About</li>
+            <li
+              style={{ cursor: "pointer", padding: "5px 0" }}
+              onClick={handleLogout}
+            >
               Logout
             </li>
           </ul>
