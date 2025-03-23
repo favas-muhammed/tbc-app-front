@@ -55,7 +55,7 @@ function App() {
         }}
       >
         <DropdownMenu />
-        <h1 style={{ flexGrow: 1, textAlign: "center" }}>Velocity</h1>
+        <h1>Velocity</h1>
 
         <AuthButton onClick={handleGmailAuth} />
       </div>
