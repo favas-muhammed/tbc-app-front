@@ -4,6 +4,7 @@ import kamName from "../assets/kamName";
 import companyKAM from "../assets/companyKAM";
 import companyCountry from "../assets/companyCountry";
 import zipCodeKAM from "../assets/zipCodeKAM";
+
 const B2BAutomations = () => {
   const [emails, setEmails] = useState([]);
   const [selectedEmail, setSelectedEmail] = useState(null);
@@ -50,8 +51,6 @@ const B2BAutomations = () => {
         "https://www.googleapis.com/gmail/v1/users/me/messages?q=is:unread&maxResults=2000",
         { headers: { Authorization: `Bearer ${token}` } }
       );
-      await new Promise((resolve) => setTimeout(resolve, 3000)); // Further increased delay to avoid rate limiting
-
 
       await new Promise((resolve) => setTimeout(resolve, 3000)); // Further increased delay to avoid rate limiting
 
@@ -82,8 +81,6 @@ const B2BAutomations = () => {
                 zipCode: "N/A",
               },
             }; // Return a default structure for emails without payload
-
-            return null; // Skip this email if payload is missing
           }
           const subject =
             emailData.payload.headers.find((h) => h.name === "Subject")
@@ -220,13 +217,13 @@ const B2BAutomations = () => {
                   {kam} - {email.data.country.replace(/\*\*Â/g, "")} -{" "}
                   {email.data.zipCode.replace(/\*\*Â/g, "")}
                 </>
-              )}*/}
+              }*/}
 
               {type === "access" &&
                 (countryCode !== "US" ? (
                   <>
                     :{countryCode}: -{email.data.email.replace(/\*\*Â/g, "")} /{" "}
-                    {kam} 
+                    {kam}
                   </>
                 ) : (
                   <>
@@ -234,7 +231,6 @@ const B2BAutomations = () => {
                     -
                     {/*}  {kam} - {email.data.country.replace(/\*\*Â/g, "")} -{" "}*/}
                     {getZipCodeKAM(email.data.zipCode)}-
-                 
                   </>
                 ))}
 
@@ -244,7 +240,7 @@ const B2BAutomations = () => {
                   {email.data.qCompany
                     .replace(/amp; /g, " ")
                     .replace(/&quot;/g, "")
-                    .replace(/&amp;/g, "")
+                    .replace(/&amp;/g, "")x
                     .replace(/ &#39;/g, "''")}{" "}
                   {email.data.qName.replace(/\*\*Â/g, "")} /{" "}
                   {email.data.qEmail.replace(/\*\*Â/g, "")} / @{companyKAMName}
