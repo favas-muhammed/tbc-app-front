@@ -240,7 +240,7 @@ const B2BAutomations = () => {
                   {email.data.qCompany
                     .replace(/amp; /g, " ")
                     .replace(/&quot;/g, "")
-                    .replace(/&amp;/g, "")x
+                    .replace(/&amp;/g, "")
                     .replace(/ &#39;/g, "''")}{" "}
                   {email.data.qName.replace(/\*\*Â/g, "")} /{" "}
                   {email.data.qEmail.replace(/\*\*Â/g, "")} / @{companyKAMName}
