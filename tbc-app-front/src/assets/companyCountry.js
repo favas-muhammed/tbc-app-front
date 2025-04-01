@@ -3425,6 +3425,7 @@ const companyCountry = {
   "The inside Look": "AT",
   CapriLuxury: "FR",
   "The Luxury Club S.A.S di Cioara Madalina Iuliana": "IT",
+  "The Luxury Club SAS di Cioara": "IT",
   vintagessentials: "GB",
   "PERSONAL SELLER": "FR",
   Alisitass: "US",

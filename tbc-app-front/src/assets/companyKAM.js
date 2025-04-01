@@ -3443,6 +3443,7 @@ const companyKAM = {
   "The inside Look": "Nihal Abubaker",
   CapriLuxury: "Salomé Dossavi",
   "The Luxury Club S.A.S di Cioara Madalina Iuliana": "Ginevra Bianchi",
+  "The Luxury Club SAS di Cioara": "Ginevra Bianchi",
   vintagessentials: "Nihal Abubaker",
   "PERSONAL SELLER": "Salomé Dossavi",
   Alisitass: "David Mapela",
