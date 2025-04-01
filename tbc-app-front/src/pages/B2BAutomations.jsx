@@ -251,7 +251,7 @@ const B2BAutomations = () => {
                 <>
                   {email.data.nCompany.replace(/:/g, "")} -{" "}
                   {email.data.nOrderNumber.replace(/Â/g, "")} / @
-                  {companyKAMName}
+                  {getcompanyKAM(email.data.nCompany.replace(/:/g, ""))}{" "}
                 </>
               )}
             </div>
