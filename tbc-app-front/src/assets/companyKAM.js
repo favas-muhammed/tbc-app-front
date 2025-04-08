@@ -1944,6 +1944,8 @@ const companyKAM = {
   Reluxe: "Nihal Abubaker",
   "Aragon Motors": "Salomé Dossavi",
   "YOLO Luxury Consignment": "Sara Martin",
+  "YOLO Luxury Consignment -c29003fc-e357-426f-b186-6be80bb724d2":
+    "Sara Martin",
   "MY FATHER’S FACE": "Salomé Dossavi",
   Vintlux: "Salomé Dossavi",
   Biohackeurs: "Salomé Dossavi",

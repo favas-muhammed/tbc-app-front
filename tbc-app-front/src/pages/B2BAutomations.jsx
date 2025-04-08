@@ -275,6 +275,7 @@ const B2BAutomations = () => {
   };
 
   const getcompanyKAM = (companyName) => {
+    if (!companyName) return "N/A";
     const cleanedCompanyName = companyName?.replace(/\*\*Â/g, "").trim();
     return companyKAM[cleanedCompanyName] || "N/A";
   };
@@ -309,8 +310,15 @@ const B2BAutomations = () => {
           companyKAMName = getcompanyKAM(email.data.qCompany);
           companyCountryName = getCompanyCountry(email.data.qCompany); // Get company country
         } else if (type === "sale") {
-          companyKAMName = getcompanyKAM(email.data.nCompany);
-          companyCountryName = getCompanyCountry(email.data.nCompany); // Get company country
+          let companyName = email.data.nCompany;
+          companyName = companyName
+            .replace(/:/g, "")
+            .replace(/Â/g, "")
+            .replace(/<\/?[^>]+(>|$)/g, "") // Remove all HTML tags
+            .replace(/\s+/g, " ") // Normalize whitespace
+            .trim();
+          companyKAMName = getcompanyKAM(companyName);
+          companyCountryName = getCompanyCountry(email.data.nCompany);
         }
         return (
           <div
@@ -369,7 +377,7 @@ const B2BAutomations = () => {
                     .replace(/\s+/g, " ") // Normalize whitespace
                     .trim()}{" "}
                   - {email.data.nOrderNumber.replace(/Â/g, "")} / @
-                  {getcompanyKAM(email.data.nCompany.replace(/:/g, ""))} @
+                  {companyKAMName}
                 </>
               )}
             </div>
