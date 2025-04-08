@@ -40755,6 +40755,6 @@ const zipCodeKAM = {
   26866: "@Sara Martin",
   26884: "@Sara Martin",
   26886: "@Sara Martin",
+  "02478": "@David Mapela",
 };
-
 export default zipCodeKAM;

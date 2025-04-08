@@ -653,6 +653,8 @@ const companyCountry = {
   Luis: "PT",
   "BUYMYCLOSET BY RANIA K.LTD": "CY",
   "Pepso B.V.": "NL",
+  "Pepso BV": "Nihal Abubaker",
+
   "VINTAGE CREATIVES Marek Jackowski": "PL",
   "LUXURY DRESS-CODE": "FR",
   "Capital Equipment Ice": "US",

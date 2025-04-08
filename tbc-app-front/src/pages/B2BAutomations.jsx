@@ -9,6 +9,117 @@ const B2BAutomations = () => {
   const [emails, setEmails] = useState([]);
   const [selectedEmail, setSelectedEmail] = useState(null);
 
+  const demoQuoteEmails = [
+    "abouskine+postmep@thebrandcollector.com",
+    "abouskine+accessrequest@thebrandcollector.com",
+    "abouskine+test@thebrandcollector.com",
+    "jigot24822@jahsec.com",
+    "hippolyte+45445@thebrandcollector.com",
+    "test@test.com",
+    "hippolyte+44@thebrandcollector.com",
+    "ngautier+tbctest@gmail.com",
+    "hippolyte.noton+45@essca.eu",
+    "hippolyte.noton+2@essca.eu",
+    "hippolyte+50@thebrandcollector.com",
+    "qincindy60@gmail.com",
+    "mybestdeal@yopmail.com",
+    "testtest2@yopmail.com",
+    "laurentluc7@thebrandcollector.com",
+    "myemailtest45@gmail.com",
+    "laura.fouquet7@orange.fr",
+    "laura.fouquet@orange.fr",
+    "testcom@yopmail.com",
+    "94848595959@gmail.com",
+    "tes@hotmail.fr",
+    "test@thebrandcollector.com",
+    "nicolas+test2@thebrandcollector.com",
+    "soukii.amrani@gmail.com",
+    "forjfoirjofjrjfj@hotmail.com",
+    "xilon.jul+test@gmail.com",
+    "testluc@gmail.com",
+    "turterorti@gufum.com",
+    "info@lfy.ch",
+    "alicelevkovichlev@gmail.com",
+    "e.zaharko@nord-soft.com",
+    "a.rymareva@nord-soft.com",
+    "zaharko.1998@gmail.com",
+    "e.leshkova@nord-soft.com",
+    "nmedina@thebrandcollector.com",
+    "estahl@thebrandcollector.com",
+    "amelyah@thebrandcollector.com",
+    "drelleke@thebrandcollector.com",
+    "hgazzar@thebrandcollector.com",
+    "aegoaguirre@thebrandcollector.com",
+    "acalattini@thebrandcollector.com",
+    "mcharpentier@thebrandcollector.com",
+    "imartinez@thebrandcollector.com",
+    "leo@blanche.agency",
+    "jmakaya@thebrandcollector.com",
+    "egrimaud@thebrandcollector.com",
+    "mandybaileqqqx@outlook.com",
+    "liezl.cayanan@hokodo.co",
+    "vdoux@thebrandcollector.com",
+    "itika.a@theluxurycloset.com",
+    "gbianchi@thebrandcollector.com",
+    "khinna@thebrandcollector.com",
+    "afaudel@thebrandcollector.com",
+    "gfernet@thebrandcollector.com",
+    "nzhou@thebrandcollector.com",
+    "edelagnes@thebrandcollector.com",
+    "ielazhari@thebrandcollector.com",
+    "bforth@thebrandcollector.com",
+    "vrajobson@thebrandcollector.com",
+    "sdossavi@thebrandcollector.com",
+    "mzoppi@thebrandcollector.com",
+    "lbenyahia@thebrandcollector.com",
+    "pxu@thebrandcollector.com",
+    "julietteploue@gmail.com",
+    "j.ploue@ei-montpellier.com",
+    "jnyoon@thebrandcollector.com",
+    "f.fattami@gmail.com",
+    "xtong@thebrandcollector.com",
+    "ngautier@engenious.fr",
+    "jmekina@thebrandcollector.com",
+    "jpons+test@thebrandcollector.com",
+    "csanchez@thebrandcollector.com",
+    "mapeladavid@outlook.fr",
+    "hello@thebrandcollector.com",
+    "zhong.grace@hotmail.fr",
+    "hippolyte+4@thebrandcollector.com",
+    "lusy.zaryan2@gmail.com",
+    "ibarkallah@thebrandcollector.com",
+    "jruchaud17@gmail.com",
+    "fortega@thebrandcollector.com",
+    "laura.salamon@vestiairecollective.com",
+    "dmitry@thebrandcollector.com",
+    "jwu@thebrandcollector.com",
+    "sdevaux@thebrandcollector.com",
+    "ngautier+wholesaletest@gmail.com",
+    "epalmeiro@thebrandcollector.com",
+    "hgouyette@thebrandcollector.com",
+    "scullerier@thebrandcollector.com",
+    "hippolyte.noton@essca.eu",
+    "nabubaker@thebrandcollector.com",
+    "asanto@thebrandcollector.com",
+    "llaurent@thebrandcollector.com",
+    "luxworldangie@gmail.com",
+    "van@shopthing.com",
+    "mmirzai@thebrandcollector.com",
+    "camille@imparfaiteparis.com",
+    "ipelissier@thebrandcollector.com",
+    "llaborde@thebrandcollector.com",
+    "antoine@thebrandcollector.com",
+    "jploue@thebrandcollector.com",
+    "farhadinou3@gmail.com",
+    "hbenaissa@thebrandcollector.com",
+    "ashvija.s@theluxurycloset.com",
+    "pscashbuy@gmail.com",
+    "cmoussimi@thebrandcollector.com",
+    "karinekaur@gmail.com",
+    "cqin@thebrandcollector.com",
+    "hippolyte@thebrandcollector.com",
+  ];
+
   // Access Request Parsers
   const parseEmailData = useCallback((content, snippet) => {
     return {
@@ -28,12 +139,12 @@ const B2BAutomations = () => {
   }, []);
 
   const parseNewSaleData = useCallback((content, snippet) => {
+    // Regex to capture content between 'Company :' and 'ORDER RECAP'
+    const companyRegex = /Company\s*:\s*(.*?)\s*ORDER RECAP/i;
+
     return {
-      nCompany: extractField(
-        snippet,
-        /Company([^-]+(?:-[^-]+)*?)(?:\s+-[a-f0-9-]+)/i
-      ).trim(),
-      nOrderNumber: extractField(content, /Order Number:\s*([^\r\n]+)/i),
+      nCompany: extractField(content, companyRegex).trim(), // Extract company name
+      nOrderNumber: extractField(content, /Order Number:\s*([^\r\n]+)/i), // Extract order number
     };
   }, []);
 
@@ -147,7 +258,9 @@ const B2BAutomations = () => {
   // Separate email types
   const accessRequests = emails.filter((e) => e.subject === "Access Request");
   const quoteRequests = emails.filter(
-    (e) => e.subject === "User Request Quote"
+    (e) =>
+      e.subject === "User Request Quote" &&
+      !demoQuoteEmails.includes(e.data.qEmail)
   );
   const newSales = emails.filter((e) => e.subject === "New Sale");
 
@@ -249,9 +362,14 @@ const B2BAutomations = () => {
 
               {type === "sale" && (
                 <>
-                  {email.data.nCompany.replace(/:/g, "")} -{" "}
-                  {email.data.nOrderNumber.replace(/Â/g, "")} / @
-                  {getcompanyKAM(email.data.nCompany.replace(/:/g, ""))}{" "}
+                  {email.data.nCompany
+                    .replace(/:/g, "")
+                    .replace(/Â/g, "")
+                    .replace(/<\/?[^>]+(>|$)/g, "") // Remove all HTML tags
+                    .replace(/\s+/g, " ") // Normalize whitespace
+                    .trim()}{" "}
+                  - {email.data.nOrderNumber.replace(/Â/g, "")} / @
+                  {getcompanyKAM(email.data.nCompany.replace(/:/g, ""))} @
                 </>
               )}
             </div>

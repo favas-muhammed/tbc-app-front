@@ -656,6 +656,7 @@ const companyKAM = {
   Luis: "Ginevra Bianchi",
   "BUYMYCLOSET BY RANIA K.LTD": "Ginevra Bianchi",
   "Pepso B.V.": "Nihal Abubaker",
+  "Pepso BV": "Nihal Abubaker",
   "VINTAGE CREATIVES Marek Jackowski": "Xuan Tong",
   "LUXURY DRESS-CODE": "Salomé Dossavi",
   "Capital Equipment Ice": "Brooke Forth",
