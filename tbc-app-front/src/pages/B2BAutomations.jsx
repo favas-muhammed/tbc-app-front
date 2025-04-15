@@ -10,6 +10,10 @@ const B2BAutomations = () => {
   const [selectedEmail, setSelectedEmail] = useState(null);
 
   const demoQuoteEmails = [
+    "mdahlenmark@thebrandcollector.com",
+    "mdahlenmark@thebrandcollector.com",
+    "hippolyte@thebrandcollector.com",
+    "jploue@thebrandcollector.com",
     "abouskine+postmep@thebrandcollector.com",
     "abouskine+accessrequest@thebrandcollector.com",
     "abouskine+test@thebrandcollector.com",
@@ -307,15 +311,45 @@ const B2BAutomations = () => {
           countryCode = getCountryCode(cleanedCountry);
           kam = getKAM(cleanedCountry);
         } else if (type === "quote") {
+          let coompanyKAM = email.data.qCompany
+            .replace(/:/g, "")
+            .replace(/Â/g, "")
+            .replace(/Ã­/g, "í")
+            .replace(/:/g, "")
+            .replace(/Â/g, "")
+            .replace(/Ã«/g, "ë")
+
+            .replace(/amp;/g, "")
+            .replace(/Ã´/g, "ë")
+            .replace(/Ã­/g, "í")
+            .replace(/â/g, "’")
+            .replace(/&#39;/g, "'")
+            .replace(/<\/?[^>]+(>|$)/g, "")
+            .replace(/\s+/g, " ")
+            .slice(0, -39)
+            .trim();
+
           companyKAMName = getcompanyKAM(email.data.qCompany);
+
           companyCountryName = getCompanyCountry(email.data.qCompany); // Get company country
         } else if (type === "sale") {
           let companyName = email.data.nCompany;
           companyName = companyName
             .replace(/:/g, "")
             .replace(/Â/g, "")
+            .replace(/Ã­/g, "í")
+            .replace(/:/g, "")
+            .replace(/Â/g, "")
+            .replace(/amp;/g, "")
+            .replace(/Ã«/g, "ë")
+            .replace(/Ã­/g, "í")
+            .replace(/â/g, "’")
+            .replace(/&#39;/g, "'")
+
             .replace(/<\/?[^>]+(>|$)/g, "") // Remove all HTML tags
-            .replace(/\s+/g, " ") // Normalize whitespace
+            .replace(/\s+/g, " ")
+            .slice(0, -39)
+            // Normalize whitespace
             .trim();
           companyKAMName = getcompanyKAM(companyName);
           companyCountryName = getCompanyCountry(email.data.nCompany);
@@ -362,9 +396,11 @@ const B2BAutomations = () => {
                     .replace(/amp; /g, " ")
                     .replace(/&quot;/g, "")
                     .replace(/&amp;/g, "")
-                    .replace(/ &#39;/g, "''")}{" "}
+                    .replace(/&#39;/g, "'")
+                    .replace(/Ã´/g, "ô")
+                    .replace(/&#39;/g, "''")}{" "}
                   {email.data.qName.replace(/\*\*Â/g, "")} /{" "}
-                  {email.data.qEmail.replace(/\*\*Â/g, "")} / @{companyKAMName}
+                  {email.data.qEmail.replace(/\*\*Â/g, "")} / {companyKAMName}
                 </>
               )}
 
@@ -373,10 +409,17 @@ const B2BAutomations = () => {
                   {email.data.nCompany
                     .replace(/:/g, "")
                     .replace(/Â/g, "")
+                    .replace(/amp;/g, "")
+                    .replace(/Ã«/g, "ë")
+                    .replace(/Ã­/g, "í")
+                    .replace(/â/g, "’")
+                    .replace(/&#39;/g, "'")
+
                     .replace(/<\/?[^>]+(>|$)/g, "") // Remove all HTML tags
                     .replace(/\s+/g, " ") // Normalize whitespace
+                    .slice(0, -39)
                     .trim()}{" "}
-                  - {email.data.nOrderNumber.replace(/Â/g, "")} / @
+                  - {email.data.nOrderNumber.replace(/Â/g, "")} /
                   {companyKAMName}
                 </>
               )}
