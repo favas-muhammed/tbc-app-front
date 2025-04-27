@@ -11,6 +11,8 @@ const CLIENT_ID =
   "514206722532-f3rnvl2mhreb5ndgcdcd0irrvtjp4u2g.apps.googleusercontent.com"; // Replace with your client ID
 const REDIRECT_URI = "https://tbc-app-front.vercel.app/auth/callback"; // Your redirect URI
 
+const API_BASE_URL = "https://tbc-app-back.vercel.app";
+
 function App() {
   const handleGmailAuth = () => {
     const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=token&scope=https://www.googleapis.com/auth/gmail.readonly`;
@@ -33,14 +35,11 @@ function App() {
 
   const fetchEmails = async () => {
     const token = localStorage.getItem("gmailAccessToken");
-    const response = await fetch(
-      "https://www.googleapis.com/gmail/v1/users/me/messages",
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+    const response = await fetch(`${API_BASE_URL}/api/emails`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     const data = await response.json();
     console.log(data); // Log the fetched emails for now
   };
