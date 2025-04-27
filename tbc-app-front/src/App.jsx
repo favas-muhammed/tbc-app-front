@@ -9,7 +9,7 @@ import B2BAutomations from "./pages/B2BAutomations.jsx";
 
 const CLIENT_ID =
   "514206722532-f3rnvl2mhreb5ndgcdcd0irrvtjp4u2g.apps.googleusercontent.com"; // Replace with your client ID
-const REDIRECT_URI = "http://localhost:5173/auth/callback"; // Your redirect URI
+const REDIRECT_URI = "https://tbc-app-front.vercel.app/auth/callback"; // Your redirect URI
 
 function App() {
   const handleGmailAuth = () => {
