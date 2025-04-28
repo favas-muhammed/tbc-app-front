@@ -203,7 +203,7 @@ const kamName = {
   Luxembourg: "@Salomé Dossavi",
   France: "@Salomé Dossavi",
   Belgium: "@Salomé Dossavi",
-  "United Kingdom": "@Nihal Abubaker",
+  "United Kingdom": "@Nihal Abubaker , @Estella Stahl",
   Jersey: "@Nihal Abubaker",
   Ireland: "@Nihal Abubaker",
   Guernsey: "@Nihal Abubaker",
