@@ -955,6 +955,7 @@ const companyCountry = {
   "The Rare Luxe LC": "US",
   "Hag International": "PL",
   MMKollection: "US",
+  "3 rungs above": "US",
   "I’m a solo buyer": "US",
   Cristina: "IT",
   "Note to Love": "US",

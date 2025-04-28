@@ -1046,6 +1046,7 @@ const companyKAM = {
   "The Rare Luxe LC": "@David Mapela , @Amelyah Roach",
   "Hag International": "@Xuan TONG , @Hiba El Gazzar",
   MMKollection: "@David Mapela , @Amelyah Roach",
+  "3 rungs above": "@Brooke Forth , @Dario Relleke",
   "I’m a solo buyer": "@David Mapela , @Amelyah Roach",
   Cristina: "@Ginevra Bianchi , @Alice Calattini",
   "Note to Love": "@Sara Martin , @Natalia Medina",
