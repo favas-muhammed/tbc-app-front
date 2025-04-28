@@ -318,8 +318,8 @@ const B2BAutomations = () => {
             .replace(/:/g, "")
             .replace(/Â/g, "")
             .replace(/Ã«/g, "ë")
-            .replace(/Ã­/g,"í")
-            .replace(/Ã³/g,"ó")
+            .replace(/Ã­/g, "í")
+            .replace(/Ã³/g, "ó")
 
             .replace(/amp;/g, "")
             .replace(/Ã´/g, "ë")
@@ -400,6 +400,9 @@ const B2BAutomations = () => {
                     .replace(/&amp;/g, "")
                     .replace(/&#39;/g, "'")
                     .replace(/Ã´/g, "ô")
+                    .replace(/Ã/g, "í")
+                    .replace(/Ã³/g, "ó")
+
                     .replace(/&#39;/g, "''")}{" "}
                   {email.data.qName.replace(/\*\*Â/g, "")} /{" "}
                   {email.data.qEmail.replace(/\*\*Â/g, "")} / {companyKAMName}
