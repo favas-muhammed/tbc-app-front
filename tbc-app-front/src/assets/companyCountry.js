@@ -645,7 +645,7 @@ const companyCountry = {
   "unicorn luxury": "CA",
   "Byluxe.tlv": "FR",
   "SONO LUXE LTD": "GB",
-  "Sarah Kennedy": "IE",
+  "Sarah Kennedy": "flag-ie",
   SierenSo: "NL",
   "JRM Management Consulting Services": "AU",
   "Interim Finance & Business Control bv": "NL",
