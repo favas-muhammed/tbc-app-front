@@ -4908,6 +4908,6 @@ const companyKAM = {
   "Ali Lux": "@Sara Martin , @Natalia Medina",
   "Ambiance D'Elegance S.L.": "@Ginevra Bianchi , @Alice Calattini",
   "abela designs": "@David Mapela , @Amelyah Roach",
-  "3 rungs above  Abigail Gray": "@Brooke Forth @Dario Relleke",
+  "3 rungs above ": "@Brooke Forth @Dario Relleke",
 };
 export default companyKAM;
