@@ -2030,6 +2030,7 @@ const companyCountry = {
   "Limon, LLC": "US",
   Wararni: "DK",
   "La Grande Boutique/ Carlotta": "FR",
+  "ASF VENTURES PC": "flag-gr",
   Resee: "FR",
   "Balrose Trading": "US",
   "Karlsson Holding B.V.": "NL",
