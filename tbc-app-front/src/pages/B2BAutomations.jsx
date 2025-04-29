@@ -8,9 +8,11 @@ import zipCodeKAM from "../assets/zipCodeKAM";
 const B2BAutomations = () => {
   const [emails, setEmails] = useState([]);
   const [selectedEmail, setSelectedEmail] = useState(null);
+  const [activeTab, setActiveTab] = useState(0);
 
   const demoQuoteEmails = [
     "mdahlenmark@thebrandcollector.com",
+
     "mdahlenmark@thebrandcollector.com",
     "hippolyte@thebrandcollector.com",
     "jploue@thebrandcollector.com",
@@ -124,14 +126,15 @@ const B2BAutomations = () => {
     "hippolyte@thebrandcollector.com",
   ];
 
-  // Access Request Parsers
+  // Email parsers
   const parseEmailData = useCallback((content, snippet) => {
     return {
       country: extractField(content, /Country:\s*([^\r\n]+)/i),
       email: extractField(snippet, /Email:\s*([^\s]+)/i),
       zipCode: extractField(content, /Zip Code:\s*([^\r\n]+)/i),
     };
-  }, []); // Quote Request Parsers
+  }, []);
+
   const parseQuoteRequestData = useCallback((content, snippet) => {
     return {
       qCompany: extractField(snippet, /Company:\s*([^\r\n]+)/i)
@@ -143,9 +146,7 @@ const B2BAutomations = () => {
   }, []);
 
   const parseNewSaleData = useCallback((content, snippet) => {
-    // Regex to capture content between 'Company :' and 'ORDER RECAP'
     const companyRegex = /Company\s*:\s*(.*?)\s*ORDER RECAP/i;
-
     return {
       nCompany: extractField(content, companyRegex).trim(), // Extract company name
       nOrderNumber: extractField(content, /Order Number:\s*([^\r\n]+)/i), // Extract order number
@@ -154,7 +155,7 @@ const B2BAutomations = () => {
 
   const extractField = (text, regex) => {
     const match = text.match(regex);
-    return match ? (match ? match[1].trim() : "N/A") : "N/A"; // Modified to return "N/A" if no match
+    return match ? match[1].trim() : "N/A"; // Modified to return "N/A" if no match
   };
 
   const fetchEmails = useCallback(async () => {
@@ -167,8 +168,7 @@ const B2BAutomations = () => {
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
-      await new Promise((resolve) => setTimeout(resolve, 3000)); // Further increased delay to avoid rate limiting
-
+      await new Promise((resolve) => setTimeout(resolve, 3000));
       const data = await response.json();
 
       if (!data.messages) return;
@@ -195,13 +195,13 @@ const B2BAutomations = () => {
                 email: "N/A",
                 zipCode: "N/A",
               },
-            }; // Return a default structure for emails without payload
+            };
           }
           const subject =
             emailData.payload.headers.find((h) => h.name === "Subject")
               ?.value || "";
           const body = decodeEmailBody(emailData.payload);
-          await new Promise((resolve) => setTimeout(resolve, 2000)); // Increased delay to avoid rate limiting
+          await new Promise((resolve) => setTimeout(resolve, 2000));
 
           if (subject === "Access Request") {
             return {
@@ -241,8 +241,10 @@ const B2BAutomations = () => {
   }, [parseEmailData, parseQuoteRequestData, parseNewSaleData]);
 
   useEffect(() => {
-    fetchEmails();
-  }, [fetchEmails]);
+    if (activeTab === 0) {
+      fetchEmails();
+    }
+  }, [fetchEmails, activeTab]);
 
   const decodeEmailBody = (payload) => {
     if (payload.parts) {
@@ -295,7 +297,7 @@ const B2BAutomations = () => {
   };
 
   const renderEmailList = (emailList, type) => (
-    <div style={{ marginTop: "50px" }}>
+    <div style={{ marginTop: "30px" }}>
       {emailList.map((email) => {
         let countryCode = "N/A";
         let kam = "N/A";
@@ -303,8 +305,6 @@ const B2BAutomations = () => {
         let companyCountryName = "N/A";
 
         if (type === "access") {
-          // Extract, clean, and get the country code
-
           const cleanedCountry = email.data.country
             ?.replace(/\*\*Â/g, "")
             .trim();
@@ -327,10 +327,8 @@ const B2BAutomations = () => {
             .replace(/\s+/g, " ")
             .slice(0, -39)
             .trim();
-
           companyKAMName = getcompanyKAM(email.data.qCompany);
-
-          companyCountryName = getCompanyCountry(email.data.qCompany); // Get company country
+          companyCountryName = getCompanyCountry(email.data.qCompany);
         } else if (type === "sale") {
           let companyName = email.data.nCompany;
           companyName = companyName
@@ -363,14 +361,6 @@ const B2BAutomations = () => {
             onClick={() => setSelectedEmail(email)}
           >
             <div>
-              {/*} {type === "access" && (
-                <>
-                  :{countryCode}: -{email.data.email.replace(/\*\*Â/g, "")} /{" "}
-                  {kam} - {email.data.country.replace(/\*\*Â/g, "")} -{" "}
-                  {email.data.zipCode.replace(/\*\*Â/g, "")}
-                </>
-              }*/}
-
               {type === "access" &&
                 (countryCode !== "US" ? (
                   <>
@@ -380,7 +370,6 @@ const B2BAutomations = () => {
                 ) : (
                   <>
                     :{countryCode}: -{email.data.email.replace(/\*\*Â/g, "")} /{" "}
-                    {/*}  {kam} - {email.data.country.replace(/\*\*Â/g, "")} -{" "}*/}
                     {getZipCodeKAM(email.data.zipCode)}
                   </>
                 ))}
@@ -390,11 +379,10 @@ const B2BAutomations = () => {
                   :{companyCountryName}: -
                   {email.data.qCompany
                     .replace(/amp; /g, " ")
-                    .replace(/&quot;/g, "")
+                    .replace(/"/g, "")
                     .replace(/&amp;/g, "")
                     .replace(/&#39;/g, "'")
                     .replace(/Ã³/g, "ó")
-
                     .replace(/Ã´/g, "ô")
                     .replace(/Ã/g, "í")
                     .replace(/Ã³/g, "ó")
@@ -430,80 +418,81 @@ const B2BAutomations = () => {
     </div>
   );
 
+  // Tab configuration
+  const tabData = [
+    {
+      name: "Access, Quote & New Sale",
+      content: (
+        <>
+          <h3>Access Request</h3>
+          {renderEmailList(accessRequests, "access")}
+          <h3 style={{ marginTop: "30px" }}>Quote Request</h3>
+          {renderEmailList(quoteRequests, "quote")}
+          <h3 style={{ marginTop: "30px" }}>New Sales</h3>
+          {renderEmailList(newSales, "sale")}
+        </>
+      ),
+    },
+    { name: "Tab 2", content: <p>Content for Tab 2</p> },
+    { name: "Tab 3", content: <p>Content for Tab 3</p> },
+    { name: "Tab 4", content: <p>Content for Tab 4</p> },
+    { name: "Tab 5", content: <p>Content for Tab 5</p> },
+    { name: "Tab 6", content: <p>Content for Tab 6</p> },
+    { name: "Tab 7", content: <p>Content for Tab 7</p> },
+  ];
+
   return (
     <div>
-      <h3 style={{ marginTop: "220px" }}>Access Request</h3>
-      {renderEmailList(accessRequests, "access")}
-
-      <h3 style={{ marginTop: "50px" }}>Quote Request</h3>
-      {renderEmailList(quoteRequests, "quote")}
-
-      <h3 style={{ marginTop: "50px" }}>New Sales</h3>
-      {renderEmailList(newSales, "sale")}
-
-      {/*  {selectedEmail && (
+      <ul
+        style={{
+          display: "flex",
+          borderBottom: "1px solid #ccc",
+          padding: 5,
+          marginBottom: 20,
+          width: "100%",
+          justifyContent: "space-between",
+        }}
+      >
+        {tabData.map((tab, idx) => (
+          <li
+            key={tab.name}
+            onClick={() => {
+              setSelectedEmail(null);
+              setActiveTab(idx);
+            }}
+            style={{
+              listStyle: "none",
+              padding: "10px 20px",
+              cursor: "pointer",
+              borderBottom:
+                activeTab === idx ? "3px solid rgb(109, 121, 134)" : "none",
+              color: activeTab === idx ? "#007bff" : "#333",
+              fontWeight: activeTab === idx ? "bold" : "normal",
+              transition: "border-bottom 0.2s",
+              flex: 1,
+              textAlign: "center",
+            }}
+          >
+            {tab.name}
+          </li>
+        ))}
+      </ul>
+      <div style={{ padding: 16, background: "#fafafa", borderRadius: 4 }}>
+        {tabData[activeTab].content}
+      </div>
+      {/* Optional: Show details of selected email */}
+      {selectedEmail && (
         <div
           style={{
-            marginLeft: "0px",
             marginTop: "20px",
             padding: "20px",
             border: "1px solid #ccc",
-            backgroundColor: "black",
-            color: "white",
+            backgroundColor: "#222",
+            color: "#fff",
+            borderRadius: "4px",
           }}
-        >
-          <h4>Full Email Details</h4>
-          <div style={{ marginTop: "10px" }}>
-            {selectedEmail.subject === "Access Request" && (
-              <>
-                <div>
-                  <strong>Country:</strong> {selectedEmail.data.country}
-                </div>
-                <div>
-                  <strong>Email:</strong> {selectedEmail.data.email}
-                </div>
-                <div>
-                  <strong>Zip Code:</strong> {selectedEmail.data.zipCode}
-                </div>
-              </>
-            )}
-            {selectedEmail.subject === "User Request Quote" && (
-              <>
-                <div>
-                  <strong>Company:</strong> {selectedEmail.data.qCompany}
-                </div>
-                <div>
-                  <strong>Email:</strong> {selectedEmail.data.qEmail}
-                </div>
-                <div>
-                  <strong>Name:</strong> {selectedEmail.data.qName}
-                </div>
-              </>
-            )}
-            {selectedEmail.subject === "New Sale" && (
-              <>
-                <div>
-                  <strong>Company:</strong> {selectedEmail.data.nCompany}
-                </div>
-                <div>
-                  <strong>Order Number:</strong>
-                  {""}
-
-
-                  {selectedEmail.data.nOrderNumber}
-                </div>
-              </>
-            )}
-          </div>
-          <pre
-            style={{
-              backgroundColor: "trandparent",
-              marginTop: "20px",
-              padding: "1px",
-            }}
-          ></pre>
-        </div>
-      )}*/}
+        ></div>
+      )}
     </div>
   );
 };
