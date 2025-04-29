@@ -447,8 +447,6 @@ const B2BAutomations = () => {
       ),
     },
     { name: "DHL SHipping Cost", content: <p>Loading...</p> },
-    { name: "DEV", content: <p>Loading...</p> },
-    { name: "Prod", content: <p>Loading...</p> },
   ];
 
   return (
@@ -463,11 +461,11 @@ const B2BAutomations = () => {
       {renderEmailList(newSales, "sale")}*/}
       <ul
         style={{
-          display: "flex",
+          display: "block",
           borderBottom: "1px solid #ccc",
           padding: 1,
-          marginBottom: 20,
-          width: "100%",
+          marginBottom: 25,
+          width: "1690px",
           justifyContent: "space-between",
         }}
       >
@@ -479,9 +477,10 @@ const B2BAutomations = () => {
               setActiveTab(idx);
             }}
             style={{
-              listStyle: "none",
+              listStyle: "inherit",
               padding: "10px 66px",
               cursor: "pointer",
+
               borderBottom:
                 activeTab === idx ? "3px solid rgb(109, 121, 134)" : "none",
               color: activeTab === idx ? "#007bff" : "#333",
