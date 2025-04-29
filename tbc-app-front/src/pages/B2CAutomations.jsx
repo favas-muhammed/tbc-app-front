@@ -114,7 +114,7 @@ const B2CAutomations = () => {
       <ul>
         {emails.map(({ id, data }) => (
           <li key={id}>
-            {data.sku} / {data.saleId} /
+            * {data.sku} / {data.saleId} /
           </li>
         ))}
       </ul>
