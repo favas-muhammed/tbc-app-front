@@ -13,7 +13,10 @@ const B2CAutomations = () => {
         setLoading(true);
         setError(null);
         try {
-          const response = await fetch("/api/emails");
+          const response = await fetch(
+            "https://tbc-app-back.vercel.app/api/emails"
+          );
+
           if (!response.ok) {
             throw new Error("Failed to fetch emails");
           }
