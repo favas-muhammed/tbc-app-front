@@ -11,10 +11,11 @@ const DropdownMenu = () => {
   const dropdownStyle = {
     position: "absolute",
     left: "10px",
-    top: "50px", // Increased this value to move the dropdown lower
+    top: "52px", // Increased this value to move the dropdown lower
     border: "1px solid #ccc",
     borderRadius: "4px",
     padding: "10px",
+    backgroundImage: "url('/assets/background.jpg')",
     zIndex: 1000,
   };
 
@@ -41,6 +42,13 @@ const DropdownMenu = () => {
           <ul style={{ listStyleType: "none", padding: 0, margin: 0 }}>
             <li
               style={{ cursor: "pointer", padding: "5px 0" }}
+              onClick={() => navigate("")}
+            >
+              Home
+            </li>
+
+            <li
+              style={{ cursor: "pointer", padding: "5px 0" }}
               onClick={() => navigate("/b2b-automations")}
             >
               B2B Automations
@@ -51,7 +59,14 @@ const DropdownMenu = () => {
             >
               B2C Automations
             </li>
-            <li style={{ cursor: "default", padding: "5px 0" }}>About</li>
+
+            <li
+              style={{ cursor: "pointer", padding: "5px 0" }}
+              onClick={() => navigate("/about")}
+            >
+              About
+            </li>
+
             <li
               style={{ cursor: "pointer", padding: "5px 0" }}
               onClick={handleLogout}

@@ -24,6 +24,7 @@ a:hover {
 
 body {
   margin: 0;
+  background-image: url("../src/assets/background.jpg");
   display: flex;
   place-items: center;
   min-width: 320px;
@@ -40,7 +41,6 @@ h1 {
   margin: 0;
   z-index: 1000;
   transition: all 0.3s ease;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   border-radius: 0 0 10px 10px;
 }
 
@@ -59,13 +59,12 @@ button {
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
-  background-color: #1a1a1a;
   cursor: hover;
   transition: border-color 0.25s;
-  background-color: #696969;
+  background-color: #ddd0d0;
 }
 button:hover {
-  background-color: #414590;
+  background-color: #7f82b5;
 }
 button:focus,
 button:focus-visible {
@@ -78,6 +77,6 @@ button:focus-visible {
     background-color: #ffffff;
   }
   a:hover {
-    color: #747bff;
+    color: #9194d5;
   }
 }
