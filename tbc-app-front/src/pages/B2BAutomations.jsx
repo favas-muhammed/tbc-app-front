@@ -501,7 +501,7 @@ const B2BAutomations = () => {
           </div>
           <pre
             style={{
-              backgroundColor: "black",
+              backgroundColor: "trandparent",
               marginTop: "20px",
               padding: "1px",
             }}
