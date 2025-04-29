@@ -6,6 +6,8 @@ import DropdownMenu from "./components/DropdownMenu.jsx";
 import EmailList from "./components/EmailList.jsx";
 import EmailDetail from "./components/EmailDetail.jsx";
 import B2BAutomations from "./pages/B2BAutomations.jsx";
+import B2CAutomations from "./pages/B2CAutomations.jsx";
+
 import About from "./pages/About.jsx";
 const CLIENT_ID =
   "514206722532-f3rnvl2mhreb5ndgcdcd0irrvtjp4u2g.apps.googleusercontent.com"; // Replace with your client ID
@@ -68,6 +70,7 @@ function App() {
           path="/auth/callback"
           element={<div>Handling callback...</div>}
         />{" "}
+        <Route path="/b2c-automations" element={<B2CAutomations />} />
         <Route path="/About" element={<About />} />
       </Routes>
     </Router>
