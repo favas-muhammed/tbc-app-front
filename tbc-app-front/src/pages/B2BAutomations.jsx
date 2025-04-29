@@ -157,25 +157,6 @@ const B2BAutomations = () => {
     return match ? (match ? match[1].trim() : "N/A") : "N/A"; // Modified to return "N/A" if no match
   };
 
-  const cleanText = (text) => {
-    if (!text) return text;
-    return text
-      .replace(/:/g, "")
-      .replace(/Â/g, "")
-      .replace(/Ã­/g, "í")
-      .replace(/Ã«/g, "ë")
-      .replace(/Ã³/g, "ó")
-      .replace(/amp;/g, "")
-      .replace(/Ã´/g, "ô")
-      .replace(/â/g, "’")
-      .replace(/&#39;/g, "'")
-      .replace(/"/g, "")
-      .replace(/&amp;/g, "")
-      .replace(/<\/?[^>]+(>|$)/g, "")
-      .replace(/\s+/g, " ")
-      .trim();
-  };
-
   const fetchEmails = useCallback(async () => {
     const token = localStorage.getItem("gmailAccessToken");
     if (!token) return;
@@ -288,28 +269,28 @@ const B2BAutomations = () => {
   const newSales = emails.filter((e) => e.subject === "New Sale");
 
   const getCountryCode = (countryName) => {
-    const cleanedCountryName = cleanText(countryName?.replace(/\*\*Â/g, ""));
-    return countryCodes[cleanedCountryName] || countryName || "N/A";
+    const cleanedCountryName = countryName?.replace(/\*\*Â/g, "").trim(); // Clean the input
+    return countryCodes[cleanedCountryName] || countryName || "N/A"; // Return "N/A" if no match
   };
 
   const getKAM = (countryName) => {
-    const cleanedCountryName = cleanText(countryName?.replace(/\*\*Â/g, ""));
-    return kamName[cleanedCountryName] || "N/A";
+    const cleanedCountryName = countryName?.replace(/\*\*Â/g, "").trim(); // Clean the input
+    return kamName[cleanedCountryName] || "N/A"; // Return "N/A" if no match
   };
 
   const getcompanyKAM = (companyName) => {
     if (!companyName) return "N/A";
-    const cleanedCompanyName = cleanText(companyName?.replace(/\*\*Â/g, ""));
+    const cleanedCompanyName = companyName?.replace(/\*\*Â/g, "").trim();
     return companyKAM[cleanedCompanyName] || "N/A";
   };
 
   const getCompanyCountry = (companyName) => {
-    const cleanedCompanyCountry = cleanText(companyName?.replace(/\*\*Â/g, ""));
+    const cleanedCompanyCountry = companyName?.replace(/\*\*Â/g, "").trim();
     return companyCountry[cleanedCompanyCountry] || "N/A";
   };
 
   const getZipCodeKAM = (zipCode) => {
-    const cleanedZipCode = cleanText(zipCode?.replace(/\*\*Â/g, ""));
+    const cleanedZipCode = zipCode?.replace(/\*\*Â/g, "").trim();
     return zipCodeKAM[cleanedZipCode] || "N/A";
   };
 
@@ -322,23 +303,58 @@ const B2BAutomations = () => {
         let companyCountryName = "N/A";
 
         if (type === "access") {
-          const cleanedCountry = cleanText(
-            email.data.country?.replace(/\*\*Â/g, "")
-          );
+          // Extract, clean, and get the country code
+
+          const cleanedCountry = email.data.country
+            ?.replace(/\*\*Â/g, "")
+            .trim();
           countryCode = getCountryCode(cleanedCountry);
           kam = getKAM(cleanedCountry);
         } else if (type === "quote") {
-          let coompanyKAM = cleanText(email.data.qCompany);
+          let coompanyKAM = email.data.qCompany
+            .replace(/:/g, "")
+            .replace(/Â/g, "")
+            .replace(/Ã­/g, "í")
+            .replace(/:/g, "")
+            .replace(/Â/g, "")
+            .replace(/Ã«/g, "ë")
+            .replace(/Ã­/g, "í")
+            .replace(/Ã³/g, "ó")
+
+            .replace(/amp;/g, "")
+            .replace(/Ã´/g, "ë")
+            .replace(/Ã­/g, "í")
+            .replace(/â/g, "’")
+            .replace(/&#39;/g, "'")
+            .replace(/<\/?[^>]+(>|$)/g, "")
+            .replace(/\s+/g, " ")
+            .slice(0, -39)
+            .trim();
+
           companyKAMName = getcompanyKAM(email.data.qCompany);
-          companyCountryName = getCompanyCountry(email.data.qCompany);
-          coompanyKAM = coompanyKAM.slice(0, -39);
-          coompanyKAM = coompanyKAM.trim();
+
+          companyCountryName = getCompanyCountry(email.data.qCompany); // Get company country
         } else if (type === "sale") {
-          let companyName = cleanText(email.data.nCompany);
+          let companyName = email.data.nCompany;
+          companyName = companyName
+            .replace(/:/g, "")
+            .replace(/Â/g, "")
+            .replace(/Ã­/g, "í")
+            .replace(/:/g, "")
+            .replace(/Â/g, "")
+            .replace(/amp;/g, "")
+            .replace(/Ã«/g, "ë")
+            .replace(/Ã­/g, "í")
+            .replace(/â/g, "’")
+            .replace(/&#39;/g, "'")
+
+            .replace(/<\/?[^>]+(>|$)/g, "") // Remove all HTML tags
+            .replace(/\s+/g, " ")
+            .slice(0, -39)
+            // Normalize whitespace
+            .trim();
           companyKAMName = getcompanyKAM(companyName);
           companyCountryName = getCompanyCountry(email.data.nCompany);
-          companyName = companyName.slice(0, -39);
-          companyName = companyName.trim();
         }
         return (
           <div
@@ -352,28 +368,63 @@ const B2BAutomations = () => {
             onClick={() => setSelectedEmail(email)}
           >
             <div>
+              {/*} {type === "access" && (
+                <>
+                  :{countryCode}: -{email.data.email.replace(/\*\*Â/g, "")} /{" "}
+                  {kam} - {email.data.country.replace(/\*\*Â/g, "")} -{" "}
+                  {email.data.zipCode.replace(/\*\*Â/g, "")}
+                </>
+              }*/}
+
               {type === "access" &&
                 (countryCode !== "US" ? (
                   <>
-                    :{countryCode}: -{cleanText(email.data.email)} / {kam}
+                    :{countryCode}: -{email.data.email.replace(/\*\*Â/g, "")} /{" "}
+                    {kam}
                   </>
                 ) : (
                   <>
-                    :{countryCode}: -{cleanText(email.data.email)} /{" "}
+                    :{countryCode}: -{email.data.email.replace(/\*\*Â/g, "")} /{" "}
+                    {/*}  {kam} - {email.data.country.replace(/\*\*Â/g, "")} -{" "}*/}
                     {getZipCodeKAM(email.data.zipCode)}
                   </>
                 ))}
 
               {type === "quote" && (
                 <>
-                  :{companyCountryName}: -{coompanyKAM} {email.data.qName} /{" "}
-                  {email.data.qEmail} / {companyKAMName}
+                  :{companyCountryName}: -
+                  {email.data.qCompany
+                    .replace(/amp; /g, " ")
+                    .replace(/&quot;/g, "")
+                    .replace(/&amp;/g, "")
+                    .replace(/&#39;/g, "'")
+                    .replace(/Ã´/g, "ô")
+                    .replace(/Ã/g, "í")
+                    .replace(/Ã³/g, "ó")
+
+                    .replace(/&#39;/g, "''")}{" "}
+                  {email.data.qName.replace(/\*\*Â/g, "")} /{" "}
+                  {email.data.qEmail.replace(/\*\*Â/g, "")} / {companyKAMName}
                 </>
               )}
 
               {type === "sale" && (
                 <>
-                  {companyName} - {email.data.nOrderNumber} / {companyKAMName}
+                  {email.data.nCompany
+                    .replace(/:/g, "")
+                    .replace(/Â/g, "")
+                    .replace(/amp;/g, "")
+                    .replace(/Ã«/g, "ë")
+                    .replace(/Ã­/g, "í")
+                    .replace(/â/g, "’")
+                    .replace(/&#39;/g, "'")
+
+                    .replace(/<\/?[^>]+(>|$)/g, "") // Remove all HTML tags
+                    .replace(/\s+/g, " ") // Normalize whitespace
+                    .slice(0, -39)
+                    .trim()}{" "}
+                  - {email.data.nOrderNumber.replace(/Â/g, "")} /
+                  {companyKAMName}
                 </>
               )}
             </div>
@@ -393,6 +444,70 @@ const B2BAutomations = () => {
 
       <h3 style={{ marginTop: "50px" }}>New Sales</h3>
       {renderEmailList(newSales, "sale")}
+
+      {/*  {selectedEmail && (
+        <div
+          style={{
+            marginLeft: "0px",
+            marginTop: "20px",
+            padding: "20px",
+            border: "1px solid #ccc",
+            backgroundColor: "black",
+            color: "white",
+          }}
+        >
+          <h4>Full Email Details</h4>
+          <div style={{ marginTop: "10px" }}>
+            {selectedEmail.subject === "Access Request" && (
+              <>
+                <div>
+                  <strong>Country:</strong> {selectedEmail.data.country}
+                </div>
+                <div>
+                  <strong>Email:</strong> {selectedEmail.data.email}
+                </div>
+                <div>
+                  <strong>Zip Code:</strong> {selectedEmail.data.zipCode}
+                </div>
+              </>
+            )}
+            {selectedEmail.subject === "User Request Quote" && (
+              <>
+                <div>
+                  <strong>Company:</strong> {selectedEmail.data.qCompany}
+                </div>
+                <div>
+                  <strong>Email:</strong> {selectedEmail.data.qEmail}
+                </div>
+                <div>
+                  <strong>Name:</strong> {selectedEmail.data.qName}
+                </div>
+              </>
+            )}
+            {selectedEmail.subject === "New Sale" && (
+              <>
+                <div>
+                  <strong>Company:</strong> {selectedEmail.data.nCompany}
+                </div>
+                <div>
+                  <strong>Order Number:</strong>
+                  {""}
+
+
+                  {selectedEmail.data.nOrderNumber}
+                </div>
+              </>
+            )}
+          </div>
+          <pre
+            style={{
+              backgroundColor: "trandparent",
+              marginTop: "20px",
+              padding: "1px",
+            }}
+          ></pre>
+        </div>
+      )}*/}
     </div>
   );
 };
