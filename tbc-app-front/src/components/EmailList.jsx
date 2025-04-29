@@ -74,7 +74,7 @@ const EmailList = () => {
         style={{
           display: "grid",
           gridTemplateColumns: "repeat(auto-fill, minmax(250px, 1fr))",
-          padding: "100px",
+          paddingTop: "100px",
           gap: "10px",
         }}
       >
