@@ -446,7 +446,7 @@ const B2BAutomations = () => {
       <h3 style={{ marginTop: "50px" }}>New Sales</h3>
       {renderEmailList(newSales, "sale")}
 
-      {selectedEmail && (
+      {/*  {selectedEmail && (
         <div
           style={{
             marginLeft: "0px",
@@ -507,7 +507,7 @@ const B2BAutomations = () => {
             }}
           ></pre>
         </div>
-      )}
+      )}*/}
     </div>
   );
 };
