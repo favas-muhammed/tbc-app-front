@@ -315,7 +315,7 @@ const B2BAutomations = () => {
             .replace(/:/g, "")
             .replace(/Â/g, "")
             .replace(/Ã­/g, "í")
-            .replace(/Ã³/g, "ó")
+            .replace(/"Ã³"/g, "ó")
             .replace(/Ã«/g, "ë")
             .replace(/amp;/g, "")
             .replace(/Ã´/g, "ë")
