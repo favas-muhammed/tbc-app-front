@@ -38,7 +38,7 @@ const Home = () => {
     <div
       style={{
         display: "grid",
-        gridTemplateColumns: "repeat(3, 470px)",
+        gridTemplateColumns: "repeat(3, 400px)",
         gap: "40px",
         marginTop: "200px",
         minHeight: "calc(100vh - 100px)",
