@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 
 const Home = () => {
-  const [profile, setProfile] = useState(null);
+  const [email, setEmail] = useState(null);
 
   useEffect(() => {
-    const fetchProfile = async () => {
+    const fetchEmail = async () => {
       const token = localStorage.getItem("gmailAccessToken");
       if (!token) {
-        setProfile(null);
+        setEmail(null);
         return;
       }
       try {
@@ -20,61 +20,63 @@ const Home = () => {
           }
         );
         if (!response.ok) {
-          setProfile(null);
+          setEmail(null);
           return;
         }
         const data = await response.json();
-        setProfile(data);
+        setEmail(data.email);
       } catch (error) {
-        console.error("Failed to fetch profile info", error);
-        setProfile(null);
+        console.error("Failed to fetch email", error);
+        setEmail(null);
       }
     };
 
-    fetchProfile();
+    fetchEmail();
   }, []);
-
-  if (!profile) {
-    return (
-      <div style={{ padding: "20px" }}>
-        <h2>Please log in to see your profile information.</h2>
-      </div>
-    );
-  }
 
   return (
     <div
       style={{
         display: "grid",
-        gridTemplateColumns: "repeat(3, 1fr)",
-        gap: "20px",
-        padding: "20px",
-        height: "100vh",
-        boxSizing: "border-box",
+        gridTemplateColumns: "repeat(3, 430px)",
+        gap: "40px",
+        marginTop: "200px",
+        minHeight: "calc(100vh - 100px)",
+        padding: "100px",
+        background: "transparent",
+        alignItems: "stretch",
+        boxSizing: "content-box",
       }}
     >
-      {/* First column: Profile */}
+      {/* Grid 1: Profile */}
       <div
         style={{
-          border: "1px solid #ccc",
-          borderRadius: "8px",
-          padding: "20px",
+          border: "1px solid #e0e0e0",
+          borderRadius: "12px",
+          padding: "32px 24px",
           textAlign: "center",
+          background: "#fff",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
         }}
       >
-        <img
-          src={profile.picture}
-          alt="Profile"
-          style={{ width: "100px", height: "100px", borderRadius: "50%" }}
-        />
-        <h3 style={{ marginTop: "10px" }}>{profile.name}</h3>
-        <p>{profile.email}</p>
+        <h3 style={{ marginBottom: "16px" }}>Profile</h3>
+        {email ? (
+          <p>
+            <strong>Mail ID:</strong>
+            <br />
+            {email}
+          </p>
+        ) : (
+          <p>Please log in to see your Mail ID.</p>
+        )}
       </div>
 
-      {/* Second column: Placeholder */}
+      {/* Grid 2: Messages */}
       <div
         style={{
-          border: "1px solid #ccc",
+          border: "1px solid #e0e0e0",
           borderRadius: "12px",
           padding: "32px 24px",
           background: "#fff",
@@ -87,10 +89,10 @@ const Home = () => {
         <p>No messages yet.</p>
       </div>
 
-      {/* Third column: Placeholder */}
+      {/* Grid 3: Online */}
       <div
         style={{
-          border: "1px solid #ccc",
+          border: "1px solid #e0e0e0",
           borderRadius: "12px",
           padding: "32px 24px",
           background: "#fff",

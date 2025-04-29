@@ -446,12 +446,9 @@ const B2BAutomations = () => {
         </>
       ),
     },
-    { name: "Tab 2", content: <p>Content for Tab 2</p> },
-    { name: "Tab 3", content: <p>Content for Tab 3</p> },
-    { name: "Tab 4", content: <p>Content for Tab 4</p> },
-    { name: "Tab 5", content: <p>Content for Tab 5</p> },
-    { name: "Tab 6", content: <p>Content for Tab 6</p> },
-    { name: "Tab 7", content: <p>Content for Tab 7</p> },
+    { name: "DHL SHipping Cost", content: <p>Loading...</p> },
+    { name: "DEV", content: <p>Loading...</p> },
+    { name: "Prod", content: <p>Loading...</p> },
   ];
 
   return (
@@ -468,7 +465,7 @@ const B2BAutomations = () => {
         style={{
           display: "flex",
           borderBottom: "1px solid #ccc",
-          padding: 5,
+          padding: 1,
           marginBottom: 20,
           width: "100%",
           justifyContent: "space-between",
@@ -483,7 +480,7 @@ const B2BAutomations = () => {
             }}
             style={{
               listStyle: "none",
-              padding: "10px 20px",
+              padding: "10px 66px",
               cursor: "pointer",
               borderBottom:
                 activeTab === idx ? "3px solid rgb(109, 121, 134)" : "none",
