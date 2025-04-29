@@ -1,94 +1,120 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 
 const B2CAutomations = () => {
   const [activeTab, setActiveTab] = useState(0);
-  const [orderCancelledData, setOrderCancelledData] = useState([]);
+  const [emails, setEmails] = useState([]);
+  const [selectedEmail, setSelectedEmail] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
+  const fetchEmails = useCallback(async () => {
+    const token = localStorage.getItem("gmailAccessToken");
+    if (!token) return;
+
+    setLoading(true);
+    setError(null);
+
+    try {
+      const response = await fetch(
+        "https://www.googleapis.com/gmail/v1/users/me/messages?q=is:unread subject:'A sale has been cancelled' from:support@thebrandcollector.com to:salesreport@thebrandcollector.com&maxResults=2000",
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch emails");
+      }
+
+      const data = await response.json();
+
+      if (!data.messages) {
+        setEmails([]);
+        setLoading(false);
+        return;
+      }
+
+      const emailDetails = await Promise.all(
+        data.messages.map(async (email) => {
+          const emailRes = await fetch(
+            `https://www.googleapis.com/gmail/v1/users/me/messages/${email.id}`,
+            { headers: { Authorization: `Bearer ${token}` } }
+          );
+          const emailData = await emailRes.json();
+          if (!emailData.payload) {
+            console.error(
+              "Email data is missing payload for email ID:",
+              email.id,
+              emailData
+            );
+            return {
+              id: email.id,
+              subject: "Unknown",
+              snippet: "No snippet available",
+              data: {
+                sku: "N/A",
+                saleId: "N/A",
+              },
+            };
+          }
+          const subject =
+            emailData.payload.headers.find((h) => h.name === "Subject")
+              ?.value || "";
+          const body = decodeEmailBody(emailData.payload);
+
+          // Extract SKU and Sale ID from body
+          const skuMatch = body.match(/SKU[:\s]*([^\s,]+)/i);
+          const saleIdMatch = body.match(/Sale ID[:\s]*([^\s,]+)/i);
+          const sku = skuMatch ? skuMatch[1] : "N/A";
+          const saleId = saleIdMatch ? saleIdMatch[1] : "N/A";
+
+          return {
+            id: email.id,
+            subject,
+            snippet: emailData.snippet,
+            data: { sku, saleId },
+          };
+        })
+      );
+
+      setEmails(emailDetails.filter(Boolean));
+    } catch (error) {
+      setError(error.message);
+      setEmails([]);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
   useEffect(() => {
     if (activeTab === 0) {
-      // Fetch emails when "Order Cancelled by Suppleir" tab is active
-      const fetchEmails = async () => {
-        setLoading(true);
-        setError(null);
-        try {
-          const response = await fetch(
-            "https://www.googleapis.com/gmail/v1/users/me/messages?q=is:unread&maxResults=2000"
-          );
-
-          if (!response.ok) {
-            throw new Error("Failed to fetch emails");
-          }
-          const text = await response.text();
-          let data;
-          try {
-            data = JSON.parse(text);
-          } catch (jsonError) {
-            throw new Error("Invalid JSON response: " + text);
-          }
-          // Filter emails: unread, subject "A sale has been cancelled", from support@thebrandcollector.com, to salesreport@thebrandcollector.com
-          const filteredEmails = (data.messages || []).filter((msg) => {
-            // We need to fetch full message details for each msg to check headers and body
-            // But since only message list is returned here, we will assume backend returns full messages in data.messages
-            // If not, this logic needs to be adjusted accordingly
-            const headers = msg.payload?.headers || [];
-            const subjectHeader = headers.find(
-              (h) => h.name.toLowerCase() === "subject"
-            );
-            const fromHeader = headers.find(
-              (h) => h.name.toLowerCase() === "from"
-            );
-            const toHeader = headers.find((h) => h.name.toLowerCase() === "to");
-            const isUnread = !msg.labelIds || !msg.labelIds.includes("READ");
-            return (
-              isUnread &&
-              subjectHeader?.value === "A sale has been cancelled" &&
-              fromHeader?.value
-                .toLowerCase()
-                .includes("support@thebrandcollector.com") &&
-              toHeader?.value
-                .toLowerCase()
-                .includes("salesreport@thebrandcollector.com")
-            );
-          });
-
-          // Extract SKU and Sale ID from email body snippet or body
-          const extractedData = filteredEmails.map((email) => {
-            // Try to extract SKU and Sale ID from snippet or body
-            const snippet = email.snippet || "";
-            // Simple regex to extract SKU and Sale ID from snippet
-            // Assuming SKU and Sale ID appear as "SKU: <value>" and "Sale ID: <value>"
-            const skuMatch = snippet.match(/SKU[:\s]*([^\s,]+)/i);
-            const saleIdMatch = snippet.match(/Sale ID[:\s]*([^\s,]+)/i);
-            const sku = skuMatch ? skuMatch[1] : "N/A";
-            const saleId = saleIdMatch ? saleIdMatch[1] : "N/A";
-            return { sku, saleId };
-          });
-
-          setOrderCancelledData(extractedData);
-        } catch (err) {
-          setError(err.message);
-        } finally {
-          setLoading(false);
-        }
-      };
-
       fetchEmails();
     }
-  }, [activeTab]);
+  }, [activeTab, fetchEmails]);
 
-  const renderOrderCancelledContent = () => {
+  const decodeEmailBody = (payload) => {
+    if (payload.parts) {
+      return payload.parts
+        .map((part) =>
+          part.body.data
+            ? atob(part.body.data.replace(/-/g, "+").replace(/_/g, "/"))
+            : ""
+        )
+        .join("");
+    } else if (payload.body?.data) {
+      return atob(payload.body.data.replace(/-/g, "+").replace(/_/g, "/"));
+    }
+    return "";
+  };
+
+  const renderEmailList = () => {
     if (loading) return <p>Loading...</p>;
     if (error) return <p style={{ color: "red" }}>Error: {error}</p>;
-    if (orderCancelledData.length === 0)
-      return <p>No order cancelled emails found.</p>;
+    if (emails.length === 0) return <p>No order cancelled emails found.</p>;
 
     return (
       <ul>
-        {orderCancelledData.map(({ sku, saleId }, idx) => (
-          <li key={idx}>
-            {sku} / {saleId} /
+        {emails.map(({ id, data }) => (
+          <li key={id}>
+            {data.sku} / {data.saleId} /
           </li>
         ))}
       </ul>
@@ -98,7 +124,7 @@ const B2CAutomations = () => {
   const tabData = [
     {
       name: "Order Cancelled by Suppleir",
-      content: renderOrderCancelledContent(),
+      content: renderEmailList(),
     },
     {
       name: "Last Day to ship : VC",
@@ -131,7 +157,10 @@ const B2CAutomations = () => {
         {tabData.map((tab, idx) => (
           <li
             key={tab.name}
-            onClick={() => setActiveTab(idx)}
+            onClick={() => {
+              setSelectedEmail(null);
+              setActiveTab(idx);
+            }}
             style={{
               listStyle: "none",
               padding: "10px 66px",
