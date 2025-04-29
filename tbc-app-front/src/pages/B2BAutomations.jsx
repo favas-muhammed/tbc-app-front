@@ -461,11 +461,11 @@ const B2BAutomations = () => {
       {renderEmailList(newSales, "sale")}*/}
       <ul
         style={{
-          display: "block",
+          display: "flex",
           borderBottom: "1px solid #ccc",
-          padding: 1,
-          marginBottom: 25,
-          width: "1690px",
+          padding: 5,
+          marginBottom: 20,
+          width: "1690px", // Make it full width
           justifyContent: "space-between",
         }}
       >
@@ -477,17 +477,16 @@ const B2BAutomations = () => {
               setActiveTab(idx);
             }}
             style={{
-              listStyle: "inherit",
+              listStyle: "none",
               padding: "10px 66px",
               cursor: "pointer",
-
               borderBottom:
                 activeTab === idx ? "3px solid rgb(109, 121, 134)" : "none",
               color: activeTab === idx ? "#007bff" : "#333",
               fontWeight: activeTab === idx ? "bold" : "normal",
               transition: "border-bottom 0.2s",
-              flex: 1,
-              textAlign: "center",
+              flex: 1, // Make each tab take equal width
+              textAlign: "center", // Center the tab text
             }}
           >
             {tab.name}
