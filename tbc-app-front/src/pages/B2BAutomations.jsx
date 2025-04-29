@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback, useRef } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import countryCodes from "../assets/countryCode";
 import kamName from "../assets/kamName";
 import companyKAM from "../assets/companyKAM";
@@ -349,7 +349,7 @@ const B2BAutomations = () => {
             .replace(/&#39;/g, "'")
 
             .replace(/<\/?[^>]+(>|$)/g, "") // Remove all HTML tags
-            .replace(/\s+/g, " ") // Normalize whitespace
+            .replace(/\s+/g, " ")
             .slice(0, -39)
             // Normalize whitespace
             .trim();
@@ -368,6 +368,14 @@ const B2BAutomations = () => {
             onClick={() => setSelectedEmail(email)}
           >
             <div>
+              {/*} {type === "access" && (
+                <>
+                  :{countryCode}: -{email.data.email.replace(/\*\*Â/g, "")} /{" "}
+                  {kam} - {email.data.country.replace(/\*\*Â/g, "")} -{" "}
+                  {email.data.zipCode.replace(/\*\*Â/g, "")}
+                </>
+              }*/}
+
               {type === "access" &&
                 (countryCode !== "US" ? (
                   <>
@@ -377,18 +385,17 @@ const B2BAutomations = () => {
                 ) : (
                   <>
                     :{countryCode}: -{email.data.email.replace(/\*\*Â/g, "")} /{" "}
-                    -{getZipCodeKAM(email.data.zipCode)}-
+                    {/*}  {kam} - {email.data.country.replace(/\*\*Â/g, "")} -{" "}*/}
+                    {getZipCodeKAM(email.data.zipCode)}-
                   </>
                 ))}
 
               {type === "quote" && (
                 <>
-                  :{companyCountryName}: -{" "}
+                  :{companyCountryName}: -
                   {email.data.qCompany
                     .replace(/amp; /g, " ")
-                    .replace(/"/g, "")
                     .replace(/&quot;/g, "")
-
                     .replace(/&amp;/g, "")
                     .replace(/&#39;/g, "'")
                     .replace(/Ã´/g, "ô")
@@ -416,7 +423,7 @@ const B2BAutomations = () => {
                     .replace(/\s+/g, " ") // Normalize whitespace
                     .slice(0, -39)
                     .trim()}{" "}
-                  - {email.data.nOrderNumber.replace(/Â/g, "")} /{" "}
+                  - {email.data.nOrderNumber.replace(/Â/g, "")} /
                   {companyKAMName}
                 </>
               )}
@@ -427,114 +434,79 @@ const B2BAutomations = () => {
     </div>
   );
 
-  // Ref for the container div to copy text from
-  const containerRef = useRef(null);
-
-  // Function to handle copy button click
-  const handleCopy = () => {
-    if (!containerRef.current) return;
-
-    // Collect text content from the container excluding buttons and 'Velocity'
-    // Since 'Velocity' is not explicitly in the code, we assume it's a label or element outside the email lists
-    // We will copy the text content of the email lists only
-
-    // Get all text nodes inside the container
-    const textToCopy = [];
-
-    // We will manually build the text content for each section for better formatting
-    const buildSectionText = (title, emailList, type) => {
-      let sectionText = title + ":\n";
-      emailList.forEach((email) => {
-        if (type === "access") {
-          const countryCode = getCountryCode(
-            email.data.country?.replace(/\*\*Â/g, "").trim()
-          );
-          const kam = getKAM(email.data.country?.replace(/\*\*Â/g, "").trim());
-          if (countryCode !== "US") {
-            sectionText += `:${countryCode}: - ${email.data.email.replace(
-              /\*\*Â/g,
-              ""
-            )} / ${kam}\n`;
-          } else {
-            sectionText += `:${countryCode}: - ${email.data.email.replace(
-              /\*\*Â/g,
-              ""
-            )} / -${getZipCodeKAM(email.data.zipCode)}-\n`;
-          }
-        } else if (type === "quote") {
-          const companyCountryName = getCompanyCountry(email.data.qCompany);
-          const companyKAMName = getcompanyKAM(email.data.qCompany);
-          sectionText += `:${companyCountryName}: - ${email.data.qCompany
-            .replace(/amp; /g, " ")
-            .replace(/"/g, "")
-            .replace(/&amp;/g, "")
-            .replace(/&#39;/g, "'")
-            .replace(/Ã´/g, "ô")
-            .replace(/Ã/g, "í")
-            .replace(/Ã³/g, "ó")
-            .replace(/&#39;/g, "''")} ${email.data.qName.replace(
-            /\*\*Â/g,
-            ""
-          )} / ${email.data.qEmail.replace(
-            /\*\*Â/g,
-            ""
-          )} / ${companyKAMName}\n`;
-        } else if (type === "sale") {
-          const companyKAMName = getcompanyKAM(email.data.nCompany);
-          sectionText += `${email.data.nCompany
-            .replace(/:/g, "")
-            .replace(/Â/g, "")
-            .replace(/amp;/g, "")
-            .replace(/Ã«/g, "ë")
-            .replace(/Ã­/g, "í")
-            .replace(/â/g, "’")
-            .replace(/&#39;/g, "'")
-            .replace(/<\/?[^>]+(>|$)/g, "")
-            .replace(/\s+/g, " ")
-            .slice(0, -39)
-            .trim()} - ${email.data.nOrderNumber.replace(
-            /Â/g,
-            ""
-          )} / ${companyKAMName}\n`;
-        }
-      });
-      return sectionText;
-    };
-
-    const fullText =
-      buildSectionText("Access Request", accessRequests, "access") +
-      "\n" +
-      buildSectionText("Quote Request", quoteRequests, "quote") +
-      "\n" +
-      buildSectionText("New Sales", newSales, "sale");
-
-    navigator.clipboard.writeText(fullText).then(
-      () => {
-        alert("Copied email data to clipboard!");
-      },
-      (err) => {
-        alert("Failed to copy: " + err);
-      }
-    );
-  };
-
   return (
     <div>
-      <button
-        onClick={handleCopy}
-        style={{ marginTop: "200px", marginBottom: "20px" }}
-      >
-        Copy All Data
-      </button>
-
       <h3 style={{ marginTop: "220px" }}>Access Request</h3>
-      <div ref={containerRef}>{renderEmailList(accessRequests, "access")}</div>
+      {renderEmailList(accessRequests, "access")}
 
       <h3 style={{ marginTop: "50px" }}>Quote Request</h3>
-      <div>{renderEmailList(quoteRequests, "quote")}</div>
+      {renderEmailList(quoteRequests, "quote")}
 
       <h3 style={{ marginTop: "50px" }}>New Sales</h3>
-      <div>{renderEmailList(newSales, "sale")}</div>
+      {renderEmailList(newSales, "sale")}
+
+      {/*  {selectedEmail && (
+        <div
+          style={{
+            marginLeft: "0px",
+            marginTop: "20px",
+            padding: "20px",
+            border: "1px solid #ccc",
+            backgroundColor: "black",
+            color: "white",
+          }}
+        >
+          <h4>Full Email Details</h4>
+          <div style={{ marginTop: "10px" }}>
+            {selectedEmail.subject === "Access Request" && (
+              <>
+                <div>
+                  <strong>Country:</strong> {selectedEmail.data.country}
+                </div>
+                <div>
+                  <strong>Email:</strong> {selectedEmail.data.email}
+                </div>
+                <div>
+                  <strong>Zip Code:</strong> {selectedEmail.data.zipCode}
+                </div>
+              </>
+            )}
+            {selectedEmail.subject === "User Request Quote" && (
+              <>
+                <div>
+                  <strong>Company:</strong> {selectedEmail.data.qCompany}
+                </div>
+                <div>
+                  <strong>Email:</strong> {selectedEmail.data.qEmail}
+                </div>
+                <div>
+                  <strong>Name:</strong> {selectedEmail.data.qName}
+                </div>
+              </>
+            )}
+            {selectedEmail.subject === "New Sale" && (
+              <>
+                <div>
+                  <strong>Company:</strong> {selectedEmail.data.nCompany}
+                </div>
+                <div>
+                  <strong>Order Number:</strong>
+                  {""}
+
+                  {selectedEmail.data.nOrderNumber}
+                </div>
+              </>
+            )}
+          </div>
+          <pre
+            style={{
+              backgroundColor: "trandparent",
+              marginTop: "20px",
+              padding: "1px",
+            }}
+          ></pre>
+        </div>
+      )}*/}
     </div>
   );
 };

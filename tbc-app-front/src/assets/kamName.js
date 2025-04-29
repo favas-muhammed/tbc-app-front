@@ -211,7 +211,7 @@ const kamName = {
   Luxembourg: "@Salomé Dossavi , @Erwan Grimaud , @Matthias Charpentier",
   France: "@Salomé Dossavi , @Erwan Grimaud , @Matthias Charpentier",
   Belgium: "@Salomé Dossavi , @Erwan Grimaud , @Matthias Charpentier",
-  "United Kingdom": "@Nihal Abubaker , @Estella Stahl",
+  "United Kingdom": "@Nihal Moosa Abubaker , @Estella Stahl",
   Jersey: "@Nihal Moosa Abubaker , @Estella Stahl",
   Ireland: "@Nihal Moosa Abubaker , @Estella Stahl",
   Guernsey: "@Nihal Moosa Abubaker , @Estella Stahl",
