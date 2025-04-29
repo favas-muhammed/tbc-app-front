@@ -14,7 +14,7 @@ const B2CAutomations = () => {
         setError(null);
         try {
           const response = await fetch(
-            "https://tbc-app-back.vercel.app/api/emails"
+            "https://tbc-app-back.vercel.app/auth/gmail"
           );
 
           if (!response.ok) {
