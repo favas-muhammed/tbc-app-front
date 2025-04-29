@@ -62,7 +62,7 @@ const B2CAutomations = () => {
 
           // Extract SKU and Sale ID from body
           const skuMatch = body.match(/SKU[:\s]*([^\s,]+)/i);
-          const saleIdMatch = body.match(/Sale ID[:\s]*([^\s,]+)/i);
+          const saleIdMatch = body.match(/sale id[:\s]*([^,]+)/i);
           const sku = skuMatch ? skuMatch[1] : "N/A";
           const saleId = saleIdMatch ? saleIdMatch[1] : "N/A";
 
