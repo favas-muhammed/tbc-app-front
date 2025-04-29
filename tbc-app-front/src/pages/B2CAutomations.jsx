@@ -112,11 +112,22 @@ const B2CAutomations = () => {
 
     return (
       <ul>
-        {emails.map(({ id, data }) => (
-          <li key={id}>
-            * {data.sku} / {data.saleId} /
-          </li>
-        ))}
+        {emails.map(({ id, data }) => {
+          // Clean up SKU and Sale ID
+          const cleanSku = data.sku.replace(/<[^>]+>/g, "").trim();
+          let cleanSaleId = data.saleId.replace(/<[^>]+>/g, "").trim();
+
+          // Handle "To" case and empty values
+          if (cleanSaleId === "To" || cleanSaleId === "") {
+            cleanSaleId = "N/A";
+          }
+
+          return (
+            <li key={id}>
+              {cleanSku} / {cleanSaleId}
+            </li>
+          );
+        })}
       </ul>
     );
   };
