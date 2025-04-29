@@ -315,15 +315,10 @@ const B2BAutomations = () => {
             .replace(/:/g, "")
             .replace(/Â/g, "")
             .replace(/Ã­/g, "í")
-            .replace(/:/g, "")
-            .replace(/Â/g, "")
-            .replace(/Ã«/g, "ë")
-            .replace(/Ã­/g, "í")
             .replace(/Ã³/g, "ó")
-
+            .replace(/Ã«/g, "ë")
             .replace(/amp;/g, "")
             .replace(/Ã´/g, "ë")
-            .replace(/Ã­/g, "í")
             .replace(/â/g, "’")
             .replace(/&#39;/g, "'")
             .replace(/<\/?[^>]+(>|$)/g, "")
@@ -340,8 +335,6 @@ const B2BAutomations = () => {
             .replace(/:/g, "")
             .replace(/Â/g, "")
             .replace(/Ã­/g, "í")
-            .replace(/:/g, "")
-            .replace(/Â/g, "")
             .replace(/amp;/g, "")
             .replace(/Ã«/g, "ë")
             .replace(/Ã­/g, "í")
@@ -398,6 +391,8 @@ const B2BAutomations = () => {
                     .replace(/&quot;/g, "")
                     .replace(/&amp;/g, "")
                     .replace(/&#39;/g, "'")
+                    .replace(/Ã³/g, "ó")
+
                     .replace(/Ã´/g, "ô")
                     .replace(/Ã/g, "í")
                     .replace(/Ã³/g, "ó")
@@ -418,7 +413,6 @@ const B2BAutomations = () => {
                     .replace(/Ã­/g, "í")
                     .replace(/â/g, "’")
                     .replace(/&#39;/g, "'")
-
                     .replace(/<\/?[^>]+(>|$)/g, "") // Remove all HTML tags
                     .replace(/\s+/g, " ") // Normalize whitespace
                     .slice(0, -39)
