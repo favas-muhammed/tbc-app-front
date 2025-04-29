@@ -12,7 +12,6 @@ const B2BAutomations = () => {
 
   const demoQuoteEmails = [
     "mdahlenmark@thebrandcollector.com",
-
     "mdahlenmark@thebrandcollector.com",
     "hippolyte@thebrandcollector.com",
     "jploue@thebrandcollector.com",
@@ -126,15 +125,14 @@ const B2BAutomations = () => {
     "hippolyte@thebrandcollector.com",
   ];
 
-  // Email parsers
+  // Access Request Parsers
   const parseEmailData = useCallback((content, snippet) => {
     return {
       country: extractField(content, /Country:\s*([^\r\n]+)/i),
       email: extractField(snippet, /Email:\s*([^\s]+)/i),
       zipCode: extractField(content, /Zip Code:\s*([^\r\n]+)/i),
     };
-  }, []);
-
+  }, []); // Quote Request Parsers
   const parseQuoteRequestData = useCallback((content, snippet) => {
     return {
       qCompany: extractField(snippet, /Company:\s*([^\r\n]+)/i)
@@ -146,7 +144,9 @@ const B2BAutomations = () => {
   }, []);
 
   const parseNewSaleData = useCallback((content, snippet) => {
+    // Regex to capture content between 'Company :' and 'ORDER RECAP'
     const companyRegex = /Company\s*:\s*(.*?)\s*ORDER RECAP/i;
+
     return {
       nCompany: extractField(content, companyRegex).trim(), // Extract company name
       nOrderNumber: extractField(content, /Order Number:\s*([^\r\n]+)/i), // Extract order number
@@ -155,7 +155,7 @@ const B2BAutomations = () => {
 
   const extractField = (text, regex) => {
     const match = text.match(regex);
-    return match ? match[1].trim() : "N/A"; // Modified to return "N/A" if no match
+    return match ? (match ? match[1].trim() : "N/A") : "N/A"; // Modified to return "N/A" if no match
   };
 
   const fetchEmails = useCallback(async () => {
@@ -168,7 +168,8 @@ const B2BAutomations = () => {
         { headers: { Authorization: `Bearer ${token}` } }
       );
 
-      await new Promise((resolve) => setTimeout(resolve, 3000));
+      await new Promise((resolve) => setTimeout(resolve, 3000)); // Further increased delay to avoid rate limiting
+
       const data = await response.json();
 
       if (!data.messages) return;
@@ -195,13 +196,13 @@ const B2BAutomations = () => {
                 email: "N/A",
                 zipCode: "N/A",
               },
-            };
+            }; // Return a default structure for emails without payload
           }
           const subject =
             emailData.payload.headers.find((h) => h.name === "Subject")
               ?.value || "";
           const body = decodeEmailBody(emailData.payload);
-          await new Promise((resolve) => setTimeout(resolve, 2000));
+          await new Promise((resolve) => setTimeout(resolve, 2000)); // Increased delay to avoid rate limiting
 
           if (subject === "Access Request") {
             return {
@@ -297,7 +298,7 @@ const B2BAutomations = () => {
   };
 
   const renderEmailList = (emailList, type) => (
-    <div style={{ marginTop: "30px" }}>
+    <div style={{ marginTop: "50px" }}>
       {emailList.map((email) => {
         let countryCode = "N/A";
         let kam = "N/A";
@@ -305,6 +306,8 @@ const B2BAutomations = () => {
         let companyCountryName = "N/A";
 
         if (type === "access") {
+          // Extract, clean, and get the country code
+
           const cleanedCountry = email.data.country
             ?.replace(/\*\*Â/g, "")
             .trim();
@@ -327,8 +330,10 @@ const B2BAutomations = () => {
             .replace(/\s+/g, " ")
             .slice(0, -39)
             .trim();
+
           companyKAMName = getcompanyKAM(email.data.qCompany);
-          companyCountryName = getCompanyCountry(email.data.qCompany);
+
+          companyCountryName = getCompanyCountry(email.data.qCompany); // Get company country
         } else if (type === "sale") {
           let companyName = email.data.nCompany;
           companyName = companyName
@@ -357,12 +362,18 @@ const B2BAutomations = () => {
               padding: "10px",
               cursor: "pointer",
               marginBottom: "10px",
-              borderRadius: "4px",
-              background: "#fff",
             }}
             onClick={() => setSelectedEmail(email)}
           >
             <div>
+              {/*} {type === "access" && (
+                <>
+                  :{countryCode}: -{email.data.email.replace(/\*\*Â/g, "")} /{" "}
+                  {kam} - {email.data.country.replace(/\*\*Â/g, "")} -{" "}
+                  {email.data.zipCode.replace(/\*\*Â/g, "")}
+                </>
+              }*/}
+
               {type === "access" &&
                 (countryCode !== "US" ? (
                   <>
@@ -372,6 +383,7 @@ const B2BAutomations = () => {
                 ) : (
                   <>
                     :{countryCode}: -{email.data.email.replace(/\*\*Â/g, "")} /{" "}
+                    {/*}  {kam} - {email.data.country.replace(/\*\*Â/g, "")} -{" "}*/}
                     {getZipCodeKAM(email.data.zipCode)}
                   </>
                 ))}
@@ -381,10 +393,11 @@ const B2BAutomations = () => {
                   :{companyCountryName}: -
                   {email.data.qCompany
                     .replace(/amp; /g, " ")
-                    .replace(/"/g, "")
+                    .replace(/&quot;/g, "")
                     .replace(/&amp;/g, "")
                     .replace(/&#39;/g, "'")
                     .replace(/Ã³/g, "ó")
+
                     .replace(/Ã´/g, "ô")
                     .replace(/Ã/g, "í")
                     .replace(/Ã³/g, "ó")
@@ -405,8 +418,9 @@ const B2BAutomations = () => {
                     .replace(/Ã­/g, "í")
                     .replace(/â/g, "’")
                     .replace(/&#39;/g, "'")
-                    .replace(/<\/?[^>]+(>|$)/g, "")
-                    .replace(/\s+/g, " ")
+                    .replace(/<\/?[^>]+(>|$)/g, "") // Remove all HTML tags
+                    .replace(/\s+/g, " ") // Normalize whitespace
+                    .slice(0, -39)
                     .trim()}{" "}
                   - {email.data.nOrderNumber.replace(/Â/g, "")} /
                   {companyKAMName}
@@ -418,8 +432,6 @@ const B2BAutomations = () => {
       })}
     </div>
   );
-
-  // Tab configuration
   const tabData = [
     {
       name: "Access, Quote & New Sale",
@@ -444,6 +456,14 @@ const B2BAutomations = () => {
 
   return (
     <div>
+      {/*   <h3 style={{ marginTop: "220px" }}>Access Request</h3>
+      {renderEmailList(accessRequests, "access")}
+
+      <h3 style={{ marginTop: "50px" }}>Quote Request</h3>
+      {renderEmailList(quoteRequests, "quote")}
+
+      <h3 style={{ marginTop: "50px" }}>New Sales</h3>
+      {renderEmailList(newSales, "sale")}*/}
       <ul
         style={{
           display: "flex",
@@ -481,10 +501,11 @@ const B2BAutomations = () => {
       <div style={{ padding: 16, background: "#fafafa", borderRadius: 4 }}>
         {tabData[activeTab].content}
       </div>
-      {/* Optional: Show details of selected email */}
-      {selectedEmail && (
+
+      {/*  {selectedEmail && (
         <div
           style={{
+            marginLeft: "0px",
             marginTop: "20px",
             padding: "20px",
             border: "1px solid #ccc",
@@ -529,6 +550,9 @@ const B2BAutomations = () => {
                   <strong>Order Number:</strong>
                   {""}
 
+
+
+
                   {selectedEmail.data.nOrderNumber}
                 </div>
               </>
@@ -542,8 +566,7 @@ const B2BAutomations = () => {
             }}
           ></pre>
         </div>
-      )}
-      */}
+      )}*/}
     </div>
   );
 };
