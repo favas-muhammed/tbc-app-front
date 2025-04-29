@@ -9,6 +9,7 @@ import B2BAutomations from "./pages/B2BAutomations.jsx";
 import B2CAutomations from "./pages/B2CAutomations.jsx";
 
 import About from "./pages/About.jsx";
+import Home from "./pages/Home.jsx";
 const CLIENT_ID =
   "514206722532-f3rnvl2mhreb5ndgcdcd0irrvtjp4u2g.apps.googleusercontent.com"; // Replace with your client ID
 const REDIRECT_URI = "https://tbc-app-front.vercel.app/auth/callback"; // Your redirect URI
@@ -60,10 +61,9 @@ function App() {
 
         <AuthButton onClick={handleGmailAuth} />
       </div>
-
       <Routes>
         <Route path="/b2b-automations" element={<B2BAutomations />} />
-        <Route path="/" element={<EmailList />} />
+        <Route path="/" element={<Home />} />
         <Route path="/email/:id" element={<EmailDetail />} />
         <Route path="/auth/gmail" element={<div></div>} />
         <Route
