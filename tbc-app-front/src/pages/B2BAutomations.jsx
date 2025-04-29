@@ -357,6 +357,8 @@ const B2BAutomations = () => {
               padding: "10px",
               cursor: "pointer",
               marginBottom: "10px",
+              borderRadius: "4px",
+              background: "#fff",
             }}
             onClick={() => setSelectedEmail(email)}
           >
@@ -403,9 +405,8 @@ const B2BAutomations = () => {
                     .replace(/Ã­/g, "í")
                     .replace(/â/g, "’")
                     .replace(/&#39;/g, "'")
-                    .replace(/<\/?[^>]+(>|$)/g, "") // Remove all HTML tags
-                    .replace(/\s+/g, " ") // Normalize whitespace
-                    .slice(0, -39)
+                    .replace(/<\/?[^>]+(>|$)/g, "")
+                    .replace(/\s+/g, " ")
                     .trim()}{" "}
                   - {email.data.nOrderNumber.replace(/Â/g, "")} /
                   {companyKAMName}
@@ -487,12 +488,62 @@ const B2BAutomations = () => {
             marginTop: "20px",
             padding: "20px",
             border: "1px solid #ccc",
-            backgroundColor: "#222",
-            color: "#fff",
-            borderRadius: "4px",
+            backgroundColor: "black",
+            color: "white",
           }}
-        ></div>
+        >
+          <h4>Full Email Details</h4>
+          <div style={{ marginTop: "10px" }}>
+            {selectedEmail.subject === "Access Request" && (
+              <>
+                <div>
+                  <strong>Country:</strong> {selectedEmail.data.country}
+                </div>
+                <div>
+                  <strong>Email:</strong> {selectedEmail.data.email}
+                </div>
+                <div>
+                  <strong>Zip Code:</strong> {selectedEmail.data.zipCode}
+                </div>
+              </>
+            )}
+            {selectedEmail.subject === "User Request Quote" && (
+              <>
+                <div>
+                  <strong>Company:</strong> {selectedEmail.data.qCompany}
+                </div>
+                <div>
+                  <strong>Email:</strong> {selectedEmail.data.qEmail}
+                </div>
+                <div>
+                  <strong>Name:</strong> {selectedEmail.data.qName}
+                </div>
+              </>
+            )}
+            {selectedEmail.subject === "New Sale" && (
+              <>
+                <div>
+                  <strong>Company:</strong> {selectedEmail.data.nCompany}
+                </div>
+                <div>
+                  <strong>Order Number:</strong>
+                  {""}
+
+                  {selectedEmail.data.nOrderNumber}
+                </div>
+              </>
+            )}
+          </div>
+          <pre
+            style={{
+              backgroundColor: "trandparent",
+              marginTop: "20px",
+              padding: "1px",
+            }}
+          ></pre>
+        </div>
       )}
+      */}
     </div>
   );
 };
