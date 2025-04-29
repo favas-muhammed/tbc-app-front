@@ -386,7 +386,7 @@ const B2BAutomations = () => {
                   <>
                     :{countryCode}: -{email.data.email.replace(/\*\*Â/g, "")} /{" "}
                     {/*}  {kam} - {email.data.country.replace(/\*\*Â/g, "")} -{" "}*/}
-                    {getZipCodeKAM(email.data.zipCode)}-
+                    {getZipCodeKAM(email.data.zipCode)}
                   </>
                 ))}
 

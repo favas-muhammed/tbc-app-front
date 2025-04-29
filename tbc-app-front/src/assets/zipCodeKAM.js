@@ -40757,5 +40757,6 @@ const zipCodeKAM = {
   26884: "@Sara Martin , @Natalia Medina",
   26886: "@Sara Martin , @Natalia Medina",
   "02478": "@David Mapela , @Amelyah Roach",
+  "01830": "@David Mapela , @Amelyah Roach",
 };
 export default zipCodeKAM;

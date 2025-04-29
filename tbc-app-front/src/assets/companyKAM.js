@@ -273,6 +273,7 @@ const companyKAM = {
   "Paradiso Luxury": "@Ginevra Bianchi , @Alice Calattini",
   "INNOVATECH SOLUTIONS LLC": "@Brooke Forth , @Dario Relleke",
   "Vintage Mood e secondhand": "@Ginevra Bianchi , @Alice Calattini",
+  "ASF VENTURES PC": "@Ginevra Bianchi , @Alice Calattini",
   Poulsen: "@Sara Martin , @Natalia Medina",
   "Linus Engström": "@Kamilla Hinna , @Hiba El Gazzar",
   "Sachas closet": "@Ginevra Bianchi , @Alice Calattini",
