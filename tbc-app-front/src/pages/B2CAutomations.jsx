@@ -3,9 +3,12 @@ import React, { useState, useEffect, useCallback } from "react";
 const B2CAutomations = () => {
   const [activeTab, setActiveTab] = useState(0);
   const [emails, setEmails] = useState([]);
+  const [lastDayToShipEmails, setLastDayToShipEmails] = useState([]);
   const [selectedEmail, setSelectedEmail] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [loadingLastDay, setLoadingLastDay] = useState(false);
   const [error, setError] = useState(null);
+  const [errorLastDay, setErrorLastDay] = useState(null);
 
   const fetchEmails = useCallback(async () => {
     const token = localStorage.getItem("gmailAccessToken");
@@ -84,11 +87,102 @@ const B2CAutomations = () => {
     }
   }, []);
 
+  const fetchLastDayToShipEmails = useCallback(async () => {
+    const token = localStorage.getItem("gmailAccessToken");
+    if (!token) return;
+
+    setLoadingLastDay(true);
+    setErrorLastDay(null);
+
+    try {
+      const querySubjects = [
+        "'Demain est votre dernier jour pour expédier'",
+        "'🚨 Demain sera votre dernier jour d'expédition'",
+        "'⚠️ Tomorrow is the last day to ship your item! '",
+        "'Tomorrow is the last day to ship your item! '",
+      ];
+      const subjectQuery = querySubjects
+        .map((s) => `subject:${s}`)
+        .join(" OR ");
+      const query = `is:unread (${subjectQuery}) from:hello@thebrandcollector.com to:hello@thebrandcollector.com`;
+
+      const response = await fetch(
+        `https://www.googleapis.com/gmail/v1/users/me/messages?q=${encodeURIComponent(
+          query
+        )}&maxResults=2000`,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch last day to ship emails");
+      }
+
+      const data = await response.json();
+
+      if (!data.messages) {
+        setLastDayToShipEmails([]);
+        setLoadingLastDay(false);
+        return;
+      }
+
+      const emailDetails = await Promise.all(
+        data.messages.map(async (email) => {
+          const emailRes = await fetch(
+            `https://www.googleapis.com/gmail/v1/users/me/messages/${email.id}`,
+            { headers: { Authorization: `Bearer ${token}` } }
+          );
+          const emailData = await emailRes.json();
+          if (!emailData.payload) {
+            console.error(
+              "Email data is missing payload for email ID:",
+              email.id,
+              emailData
+            );
+            return {
+              id: email.id,
+              date: "Unknown",
+              ref: "N/A",
+            };
+          }
+
+          // Extract date from headers
+          const dateHeader = emailData.payload.headers.find(
+            (h) => h.name === "Date"
+          );
+          const date = dateHeader
+            ? new Date(dateHeader.value).toLocaleString()
+            : "Unknown";
+
+          const body = decodeEmailBody(emailData.payload);
+
+          // Extract Ref from body
+          const refMatch = body.match(/Ref:\s*([^\s<]+)/i);
+          const ref = refMatch ? refMatch[1] : "N/A";
+
+          return {
+            id: email.id,
+            date,
+            ref,
+          };
+        })
+      );
+
+      setLastDayToShipEmails(emailDetails.filter(Boolean));
+    } catch (error) {
+      setErrorLastDay(error.message);
+      setLastDayToShipEmails([]);
+    } finally {
+      setLoadingLastDay(false);
+    }
+  }, []);
+
   useEffect(() => {
     if (activeTab === 0) {
       fetchEmails();
+    } else if (activeTab === 1) {
+      fetchLastDayToShipEmails();
     }
-  }, [activeTab, fetchEmails]);
+  }, [activeTab, fetchEmails, fetchLastDayToShipEmails]);
 
   const decodeEmailBody = (payload) => {
     if (payload.parts) {
@@ -132,6 +226,24 @@ const B2CAutomations = () => {
     );
   };
 
+  const renderLastDayToShipEmails = () => {
+    if (loadingLastDay) return <p>Loading...</p>;
+    if (errorLastDay)
+      return <p style={{ color: "red" }}>Error: {errorLastDay}</p>;
+    if (lastDayToShipEmails.length === 0)
+      return <p>No last day to ship emails found.</p>;
+
+    return (
+      <ul>
+        {lastDayToShipEmails.map(({ id, date, ref }) => (
+          <li key={id}>
+            {date} - {ref}
+          </li>
+        ))}
+      </ul>
+    );
+  };
+
   const tabData = [
     {
       name: "Order Cancelled by Suppleir",
@@ -139,8 +251,7 @@ const B2CAutomations = () => {
     },
     {
       name: "Last Day to ship : VC",
-      content:
-        "VC last day mails will be shown here. date of the mail, Sale ID, ",
+      content: renderLastDayToShipEmails(),
     },
     {
       name: "All Orders",

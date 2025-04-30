@@ -446,7 +446,17 @@ const B2BAutomations = () => {
         </>
       ),
     },
-    { name: "DHL SHipping Cost", content: <p>Loading...</p> },
+    {
+      name: "DHL SHipping Cost",
+      content: (
+        <>
+          <p>Loading...</p>
+          <p>....</p>
+          <p>....</p>
+          <p>....</p>
+        </>
+      ),
+    },
   ];
 
   return (
