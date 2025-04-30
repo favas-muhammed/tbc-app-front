@@ -494,7 +494,13 @@ const B2BAutomations = () => {
           </li>
         ))}
       </ul>
-      <div style={{ padding: 16, background: "#fafafa", borderRadius: 4 }}>
+      <div
+        style={{
+          padding: 0,
+          background: "#fafafa",
+          borderRadius: 4,
+        }}
+      >
         {tabData[activeTab].content}
       </div>
 

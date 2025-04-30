@@ -57,7 +57,7 @@ const Home = () => {
 
           textAlign: "center",
           background: "#fff",
-          display: "flex",
+          //  display: "flex",
           flexDirection: "column",
           justifyContent: "center",
           color: "#888",
@@ -65,15 +65,26 @@ const Home = () => {
         }}
       >
         <h3 style={{ marginBottom: "16px" }}>Profile</h3>
-        {email ? (
-          <p>
-            <strong>Mail ID:</strong>
-            <br />
-            {email}
-          </p>
-        ) : (
-          <p>Please log in to see your Mail ID.</p>
-        )}
+        <a
+          href="https://backoffice2.thebrandcollector.com/"
+          style={{
+            fontSize: "30px",
+            fontWeight: "bold",
+            marginBottom: "8px",
+            color: "#333",
+          }}
+        >
+          The Brand Collector
+        </a>
+        <img
+          src="../src/assets/tbc.png"
+          alt="Profile"
+          style={{
+            maxWidth: "100%",
+            margin: "16px auto 0",
+            display: "block",
+          }}
+        />
       </div>
 
       {/* Grid 2: Messages */}
@@ -83,18 +94,17 @@ const Home = () => {
           borderRadius: "12px",
           padding: "32px 24px",
           background: "#fff",
-          display: "flex",
+          //display: "flex",
           flexDirection: "column",
           justifyContent: "center",
           color: "#888",
           textAlign: "center",
         }}
       >
-        <h3 style={{ marginBottom: "16px" }}>Messages</h3>
-        <p>No messages yet.</p>
+        <h3 style={{ marginBottom: "16px" }}>Dashboard</h3>
+        <p>...</p>
       </div>
 
-      {/* Grid 3: Online */}
       <div
         style={{
           border: "1px solid #e0e0e0",
@@ -110,6 +120,20 @@ const Home = () => {
       >
         <h3 style={{ marginBottom: "16px" }}>Suggestions</h3>
         <textarea rows="10" cols="40"></textarea>
+        <button
+          style={{
+            marginTop: "520px",
+            marginLeft: "-100px",
+            padding: "8px 16px",
+            backgroundColor: "#007bff",
+            color: "#fff",
+            border: "none",
+            borderRadius: "4px",
+            cursor: "pointer",
+          }}
+        >
+          Send{" "}
+        </button>
       </div>
     </div>
   );
