@@ -154,7 +154,7 @@ const B2CAutomations = () => {
   ];
 
   return (
-    <div>
+    <div style={{ position: "fixed", paddingTop: "1px" }}>
       <ul
         style={{
           display: "flex",

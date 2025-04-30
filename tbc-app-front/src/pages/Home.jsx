@@ -42,7 +42,7 @@ const Home = () => {
         gap: "40px",
         marginTop: "200px",
         minHeight: "calc(100vh - 100px)",
-        padding: "100px",
+        padding: "65px",
         background: "transparent",
         alignItems: "stretch",
         boxSizing: "content-box",
@@ -54,11 +54,14 @@ const Home = () => {
           border: "1px solid #e0e0e0",
           borderRadius: "12px",
           padding: "32px 24px",
+
           textAlign: "center",
           background: "#fff",
           display: "flex",
           flexDirection: "column",
           justifyContent: "center",
+          color: "#888",
+          textAlign: "center",
         }}
       >
         <h3 style={{ marginBottom: "16px" }}>Profile</h3>
@@ -83,6 +86,8 @@ const Home = () => {
           display: "flex",
           flexDirection: "column",
           justifyContent: "center",
+          color: "#888",
+          textAlign: "center",
         }}
       >
         <h3 style={{ marginBottom: "16px" }}>Messages</h3>
@@ -96,13 +101,15 @@ const Home = () => {
           borderRadius: "12px",
           padding: "32px 24px",
           background: "#fff",
-          display: "flex",
+          //display: "flex",
           flexDirection: "column",
           justifyContent: "center",
+          color: "#888",
+          textAlign: "center",
         }}
       >
-        <h3 style={{ marginBottom: "16px" }}>Online</h3>
-        <p>No one is online.</p>
+        <h3 style={{ marginBottom: "16px" }}>Suggestions</h3>
+        <textarea rows="10" cols="40"></textarea>
       </div>
     </div>
   );

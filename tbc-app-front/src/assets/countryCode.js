@@ -43,7 +43,7 @@ const countryCodes = {
   Madagascar: "MG",
   Comoros: "KM",
   "United States of America": "US",
-  Canada: "falg-ca",
+  Canada: "flag-ca",
   "Saint Pierre and Miquelon": "PM",
   Greenland: "GL",
   "United States Minor Outlying Islands": "UM",
