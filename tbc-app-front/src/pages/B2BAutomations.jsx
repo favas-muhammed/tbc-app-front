@@ -466,7 +466,7 @@ const B2BAutomations = () => {
           padding: 5,
           marginBottom: 20,
           paddingLeft: 5,
-          width: "1500px", // Make it full width
+          width: "1525px", // Make it full width
           justifyContent: "space-between",
         }}
       >
