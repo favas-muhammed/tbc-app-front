@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import tbc from "../assets/tbc.png";
 
 const Home = () => {
   const [email, setEmail] = useState(null);
@@ -77,7 +78,7 @@ const Home = () => {
           The Brand Collector
         </a>
         <img
-          src="../src/assets/tbc.png"
+          src={tbc}
           alt="Profile"
           style={{
             maxWidth: "100%",
