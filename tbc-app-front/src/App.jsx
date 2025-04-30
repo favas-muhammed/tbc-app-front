@@ -57,7 +57,18 @@ function App() {
         }}
       >
         <DropdownMenu />
-        <h1>Velocity</h1>
+
+        <img
+          src="../src/assets/logo.png"
+          alt="Profile"
+          style={{
+            width: "50px",
+            position: "absolute",
+            left: "50%",
+            top: "1%", // Adjust to '50%' for true vertical centering
+            transform: "translateX(-50%)",
+          }}
+        />
 
         <AuthButton onClick={handleGmailAuth} />
       </div>
