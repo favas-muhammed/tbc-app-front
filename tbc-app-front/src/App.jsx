@@ -7,6 +7,7 @@ import EmailList from "./components/EmailList.jsx";
 import EmailDetail from "./components/EmailDetail.jsx";
 import B2BAutomations from "./pages/B2BAutomations.jsx";
 import B2CAutomations from "./pages/B2CAutomations.jsx";
+import logo from "./assets/logo.png"; // Import the logo image
 
 import About from "./pages/About.jsx";
 import Home from "./pages/Home.jsx";
@@ -58,20 +59,19 @@ function App() {
       >
         <DropdownMenu />
 
-        <h1
+        <img
+          src={logo}
+          alt="Logo"
           style={{
-            fontSize: "30px",
-            fontWeight: "bold",
-            fontFamily: "brush-scriptm",
-            margin: "0",
-            padding: "0",
-            textAlign: "center",
-            flexGrow: 1,
+            position: "absolute",
+            top: "16px",
+            left: "50%",
+            transform: "translateX(-50%)",
+            maxWidth: "4%",
+            display: "block",
+            zIndex: 1000 /* Ensure it stays above other content */,
           }}
-        >
-          {" "}
-          VELOCITY{" "}
-        </h1>
+        />
 
         <AuthButton onClick={handleGmailAuth} />
       </div>
