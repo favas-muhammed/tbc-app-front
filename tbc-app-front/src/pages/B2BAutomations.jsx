@@ -450,7 +450,7 @@ const B2BAutomations = () => {
   ];
 
   return (
-    <div style={{ position: "fixed", paddingTop: "1px" }}>
+    <div style={{ position: "absolute", paddingTop: "1px" }}>
       {/*   <h3 style={{ marginTop: "220px" }}>Access Request</h3>
       {renderEmailList(accessRequests, "access")}
 
