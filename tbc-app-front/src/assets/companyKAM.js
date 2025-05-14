@@ -5210,5 +5210,6 @@ const companyKAM = {
   "Ambiance D'Elegance S.L.": "@Ginevra Bianchi , @Alice Calattini",
   "abela designs": "@David Mapela , @Amelyah Roach",
   "3 rungs above ": "@Brooke Forth @Dario Relleke",
+  "JB thrith store": "@Salomé Dossavi , @Erwan Grimaud , @Matthias Charpentier",
 };
 export default companyKAM;
