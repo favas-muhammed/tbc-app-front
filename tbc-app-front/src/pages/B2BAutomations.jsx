@@ -123,6 +123,12 @@ const B2BAutomations = () => {
     "karinekaur@gmail.com",
     "cqin@thebrandcollector.com",
     "hippolyte@thebrandcollector.com",
+    "mutterstrom@thebrandcollector.com",
+    "lklemmer@thebrandcollector.com",
+    "amartini@thebrandcollector.com",
+    "mcamata@thebrandcollector.com",
+    "smartin@thebrandcollector.com ",
+    "vkretzer@thebrandcollector.com",
   ];
 
   // Access Request Parsers
