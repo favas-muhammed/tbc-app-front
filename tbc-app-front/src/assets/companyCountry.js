@@ -762,6 +762,7 @@ const companyCountry = {
   "Ngouya Ventura Almiche": "FR",
   VL: "CH",
   "Marque Luxury": "GB",
+  "JB thrith store": "FR",
   "Dream deluxe": "IT",
   Sola: "KR",
   "Southport sl": "AD",
@@ -4428,5 +4429,10 @@ const companyCountry = {
   "Ali Lux": "US",
   "Ambiance D'Elegance S.L.": "ES",
   "abela designs": "US",
+  "liquoreria chiolo srl": "IT",
+  "Coco Vintage Copenhagen": "DK",
+  "Coco Vintage": "DK",
+
+
 };
 export default companyCountry;
