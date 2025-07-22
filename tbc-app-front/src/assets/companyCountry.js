@@ -4432,7 +4432,6 @@ const companyCountry = {
   "liquoreria chiolo srl": "IT",
   "Coco Vintage Copenhagen": "DK",
   "Coco Vintage": "DK",
-
-
+  "Rowdy Rebel Boutique": "US",
 };
 export default companyCountry;

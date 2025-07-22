@@ -4796,6 +4796,6 @@ const companyKAM = {
   "abela designs": "@David Mapela , @Vitoria Kretzer",
   "3 rungs above ": "@Brooke Forth @Arianna Martini",
   "JB thrith store": "@Salomé Dossavi , @Erwan Grimaud",
-  Hafiére: "@Xuan TONG @Kamilla Hinna @@Lana Klemmer @Maja Utterström",
+  Hafiére: "@Xuan TONG @Kamilla Hinna @Lana Klemmer @Maja Utterström",
 };
 export default companyKAM;
