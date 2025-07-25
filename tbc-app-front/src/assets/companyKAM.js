@@ -4797,5 +4797,6 @@ const companyKAM = {
   "3 rungs above ": "@Brooke Forth @Arianna Martini",
   "JB thrith store": "@Salomé Dossavi , @Erwan Grimaud",
   Hafiére: "@Xuan TONG @Kamilla Hinna @Lana Klemmer @Maja Utterström",
+  "Rowdy Rebel Boutique": "@Brooke Forth @Arianna Martini",
 };
 export default companyKAM;
