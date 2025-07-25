@@ -257,8 +257,7 @@ const B2BAutomations = () => {
     setLoadingDhlInvoices(true);
     try {
       // Query for unread emails with subject starting with the specified string
-      const query =
-        'is:unread subject:"Votre facture DHL la plus récente: ORY"';
+      const query = "is:unread subject:Votre facture DHL la plus récente: ORY";
       const response = await fetch(
         `https://www.googleapis.com/gmail/v1/users/me/messages?q=${encodeURIComponent(
           query
