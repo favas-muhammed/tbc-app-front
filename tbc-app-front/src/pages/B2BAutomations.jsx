@@ -547,14 +547,13 @@ const B2BAutomations = () => {
             }}
           >
             <div>
-              <strong>Subject:</strong> {invoice.subject}
-            </div>
-            <div>
-              <strong>Attachments:</strong>
               {invoice.attachments.length > 0 ? (
                 invoice.attachments.map((att, idx) => (
                   <div key={idx} style={{ marginTop: "10px" }}>
-                    <div>{att.filename}</div>
+                    <div>
+                      {att.filename} -{" "}
+                      {new Date(invoice.date).toLocaleDateString()}
+                    </div>
                     <embed
                       src={att.dataUrl}
                       type="application/pdf"
