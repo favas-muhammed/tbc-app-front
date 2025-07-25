@@ -15,6 +15,9 @@ const B2BAutomations = () => {
   const [dhlLoading, setDhlLoading] = useState(false);
   const [dhlError, setDhlError] = useState(null);
 
+  // Error boundary state for DHL tab
+  const [dhlTabError, setDhlTabError] = useState(null);
+
   const demoQuoteEmails = [
     "mdahlenmark@thebrandcollector.com",
     "mdahlenmark@thebrandcollector.com",
@@ -497,8 +500,6 @@ const B2BAutomations = () => {
                   :{companyCountryName}: -
                   {email.data.qCompany
                     .replace(/amp; /g, " ")
-                    .replace(/"/g, "")
-                    .replace(/"/g, "")
                     .replace(/"/g, "")
                     .replace(/&quot;/g, "")
 
