@@ -256,7 +256,98 @@ const B2BAutomations = () => {
     if (activeTab === 0) {
       fetchEmails();
     }
-  }, [fetchEmails, activeTab]);
+    if (activeTab === 1) {
+      fetchDHLInvoices();
+    }
+  }, [fetchEmails, activeTab, fetchDHLInvoices]);
+
+  // Function to fetch DHL invoices when DHL tab is active
+  const fetchDHLInvoices = useCallback(async () => {
+    const token = localStorage.getItem("gmailAccessToken");
+    if (!token) return;
+
+    setDhlLoading(true);
+    setDhlError(null);
+    setDhlInvoices([]);
+
+    try {
+      // Query for emails with subject starting with the DHL invoice prefix
+      const query = 'subject:"Votre facture DHL la plus récente: ORY"';
+      const response = await fetch(
+        `https://www.googleapis.com/gmail/v1/users/me/messages?q=${encodeURIComponent(
+          query
+        )}&maxResults=100`,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      const data = await response.json();
+      if (!data.messages || data.messages.length === 0) {
+        setDhlInvoices([]);
+        setDhlLoading(false);
+        return;
+      }
+
+      // For each message, fetch details and find PDF attachments
+      const invoices = [];
+      for (const message of data.messages) {
+        const msgRes = await fetch(
+          `https://www.googleapis.com/gmail/v1/users/me/messages/${message.id}`,
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+        const msgData = await msgRes.json();
+        if (!msgData.payload) continue;
+
+        const subjectHeader = msgData.payload.headers.find(
+          (h) => h.name === "Subject"
+        );
+        const emailSubject = subjectHeader ? subjectHeader.value : "No Subject";
+
+        // Find PDF attachments in parts
+        const parts = msgData.payload.parts || [];
+        for (const part of parts) {
+          if (
+            part.filename &&
+            part.filename.toLowerCase().endsWith(".pdf") &&
+            part.body &&
+            part.body.attachmentId
+          ) {
+            const attachmentId = part.body.attachmentId;
+            // Call backend API to parse PDF attachment
+            try {
+              const parseRes = await fetch(`/api/parseDHLInvoice`, {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  messageId: message.id,
+                  attachmentId,
+                }),
+              });
+              if (!parseRes.ok) {
+                throw new Error(`Backend API error: ${parseRes.statusText}`);
+              }
+              const parsedData = await parseRes.json();
+              // Expect parsedData to have invoiceNumber and totalAmount
+              invoices.push({
+                invoiceNumber: parsedData.invoiceNumber || "N/A",
+                totalAmount: parsedData.totalAmount || "N/A",
+                emailSubject,
+              });
+            } catch (err) {
+              console.error("Error parsing DHL invoice PDF:", err);
+              setDhlError("Failed to parse some DHL invoice PDFs.");
+            }
+          }
+        }
+      }
+      setDhlInvoices(invoices);
+    } catch (error) {
+      console.error("Error fetching DHL invoices:", error);
+      setDhlError("Failed to fetch DHL invoices.");
+    } finally {
+      setDhlLoading(false);
+    }
+  }, []);
 
   const decodeEmailBody = (payload) => {
     if (payload.parts) {
@@ -406,6 +497,7 @@ const B2BAutomations = () => {
                   :{companyCountryName}: -
                   {email.data.qCompany
                     .replace(/amp; /g, " ")
+                    .replace(/"/g, "")
                     .replace(/"/g, "")
                     .replace(/"/g, "")
                     .replace(/&quot;/g, "")
