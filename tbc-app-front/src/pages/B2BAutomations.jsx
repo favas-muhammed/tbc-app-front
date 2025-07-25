@@ -587,7 +587,7 @@ const B2BAutomations = () => {
       ),
     },
     {
-      name: "DHL SHipping Cost",
+      name: "DHL Shipping Cost calculator",
       content: renderDhlInvoices(),
     },
   ];
