@@ -10,6 +10,11 @@ const B2BAutomations = () => {
   const [selectedEmail, setSelectedEmail] = useState(null);
   const [activeTab, setActiveTab] = useState(0);
 
+  // New state variables for DHL invoices
+  const [dhlInvoices, setDhlInvoices] = useState([]);
+  const [dhlLoading, setDhlLoading] = useState(false);
+  const [dhlError, setDhlError] = useState(null);
+
   const demoQuoteEmails = [
     "mdahlenmark@thebrandcollector.com",
     "mdahlenmark@thebrandcollector.com",
@@ -401,7 +406,9 @@ const B2BAutomations = () => {
                   :{companyCountryName}: -
                   {email.data.qCompany
                     .replace(/amp; /g, " ")
+                    .replace(/"/g, "")
                     .replace(/&quot;/g, "")
+
                     .replace(/&amp;/g, "")
                     .replace(/&#39;/g, "'")
                     .replace(/Ã³/g, "ó")
