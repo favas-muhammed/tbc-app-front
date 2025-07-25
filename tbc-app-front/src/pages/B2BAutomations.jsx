@@ -10,9 +10,6 @@ const B2BAutomations = () => {
   const [selectedEmail, setSelectedEmail] = useState(null);
   const [activeTab, setActiveTab] = useState(0);
 
-  const [dhlInvoices, setDhlInvoices] = useState([]);
-  const [loadingDhlInvoices, setLoadingDhlInvoices] = useState(false);
-
   const demoQuoteEmails = [
     "mdahlenmark@thebrandcollector.com",
     "mdahlenmark@thebrandcollector.com",
@@ -250,91 +247,11 @@ const B2BAutomations = () => {
     }
   }, [parseEmailData, parseQuoteRequestData, parseNewSaleData]);
 
-  const fetchDHLInvoices = useCallback(async () => {
-    const token = localStorage.getItem("gmailAccessToken");
-    if (!token) return;
-
-    setLoadingDhlInvoices(true);
-    try {
-      // Query for unread emails with subject starting with the specified string
-      const query = "is:unread subject:Votre facture DHL la plus récente: ORY";
-      const response = await fetch(
-        `https://www.googleapis.com/gmail/v1/users/me/messages?q=${encodeURIComponent(
-          query
-        )}&maxResults=2000`,
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-
-      const data = await response.json();
-      if (!data.messages) {
-        setDhlInvoices([]);
-        setLoadingDhlInvoices(false);
-        return;
-      }
-
-      const invoices = await Promise.all(
-        data.messages.map(async (email) => {
-          const emailRes = await fetch(
-            `https://www.googleapis.com/gmail/v1/users/me/messages/${email.id}?format=full`,
-            { headers: { Authorization: `Bearer ${token}` } }
-          );
-          const emailData = await emailRes.json();
-          if (!emailData.payload) {
-            return null;
-          }
-
-          const subject =
-            emailData.payload.headers.find((h) => h.name === "Subject")
-              ?.value || "";
-
-          // Extract attachments info (only PDFs)
-          const attachments = [];
-          const parts = emailData.payload.parts || [];
-          for (const part of parts) {
-            if (
-              part.filename &&
-              part.filename.toLowerCase().endsWith(".pdf") &&
-              part.body &&
-              part.body.attachmentId
-            ) {
-              // Fetch attachment data
-              const attachmentRes = await fetch(
-                `https://www.googleapis.com/gmail/v1/users/me/messages/${email.id}/attachments/${part.body.attachmentId}`,
-                { headers: { Authorization: `Bearer ${token}` } }
-              );
-              const attachmentData = await attachmentRes.json();
-              const base64Data = attachmentData.data;
-              const dataUrl = `data:application/pdf;base64,${base64Data}`;
-              attachments.push({
-                filename: part.filename,
-                dataUrl,
-              });
-            }
-          }
-
-          return {
-            id: email.id,
-            subject,
-            attachments,
-          };
-        })
-      );
-
-      setDhlInvoices(invoices.filter(Boolean));
-    } catch (error) {
-      console.error("Error fetching DHL invoices:", error);
-    } finally {
-      setLoadingDhlInvoices(false);
-    }
-  }, []);
-
   useEffect(() => {
     if (activeTab === 0) {
       fetchEmails();
-    } else if (activeTab === 1) {
-      fetchDHLInvoices();
     }
-  }, [fetchEmails, fetchDHLInvoices, activeTab]);
+  }, [fetchEmails, activeTab]);
 
   const decodeEmailBody = (payload) => {
     if (payload.parts) {
@@ -438,7 +355,7 @@ const B2BAutomations = () => {
             .replace(/Ã©/g, "é")
 
             .replace(/<\/?[^>]+(>|$)/g, "") // Remove all HTML tags
-            .replace(/\s+/g, " ") // Normalize whitespace
+            .replace(/\s+/g, " ")
             .slice(0, -39)
             // Normalize whitespace
             .trim();
@@ -463,7 +380,7 @@ const B2BAutomations = () => {
                   {kam} - {email.data.country.replace(/\*\*Â/g, "")} -{" "}
                   {email.data.zipCode.replace(/\*\*Â/g, "")}
                 </>
-              )*/}
+              }*/}
 
               {type === "access" &&
                 (countryCode !== "US" ? (
@@ -484,9 +401,7 @@ const B2BAutomations = () => {
                   :{companyCountryName}: -
                   {email.data.qCompany
                     .replace(/amp; /g, " ")
-                    .replace(/"/g, "")
                     .replace(/&quot;/g, "")
-
                     .replace(/&amp;/g, "")
                     .replace(/&#39;/g, "'")
                     .replace(/Ã³/g, "ó")
@@ -528,50 +443,6 @@ const B2BAutomations = () => {
       })}
     </div>
   );
-  const renderDhlInvoices = () => {
-    if (loadingDhlInvoices) {
-      return <p>Loading DHL invoices...</p>;
-    }
-    if (dhlInvoices.length === 0) {
-      return <p>No unread DHL invoice emails found.</p>;
-    }
-    return (
-      <div style={{ marginTop: "20px" }}>
-        {dhlInvoices.map((invoice) => (
-          <div
-            key={invoice.id}
-            style={{
-              border: "1px solid #ccc",
-              padding: "10px",
-              marginBottom: "10px",
-            }}
-          >
-            <div>
-              {invoice.attachments.length > 0 ? (
-                invoice.attachments.map((att, idx) => (
-                  <div key={idx} style={{ marginTop: "10px" }}>
-                    <div>
-                      {att.filename} -{" "}
-                      {new Date(invoice.date).toLocaleDateString()}
-                    </div>
-                    <embed
-                      src={att.dataUrl}
-                      type="application/pdf"
-                      width="600"
-                      height="400"
-                    />
-                  </div>
-                ))
-              ) : (
-                <div>No PDF attachments found</div>
-              )}
-            </div>
-          </div>
-        ))}
-      </div>
-    );
-  };
-
   const tabData = [
     {
       name: "Access, Quote & New Sale",
@@ -587,8 +458,15 @@ const B2BAutomations = () => {
       ),
     },
     {
-      name: "DHL Shipping Cost calculator",
-      content: renderDhlInvoices(),
+      name: "DHL SHipping Cost",
+      content: (
+        <>
+          <p>Loading...</p>
+          <p>....</p>
+          <p>....</p>
+          <p>....</p>
+        </>
+      ),
     },
   ];
 
@@ -694,6 +572,9 @@ const B2BAutomations = () => {
                 <div>
                   <strong>Order Number:</strong>
                   {""}
+
+
+
 
                   {selectedEmail.data.nOrderNumber}
                 </div>
