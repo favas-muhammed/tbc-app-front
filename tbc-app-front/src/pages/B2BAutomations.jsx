@@ -407,6 +407,7 @@ const B2BAutomations = () => {
                   {email.data.qCompany
                     .replace(/amp; /g, " ")
                     .replace(/"/g, "")
+                    .replace(/"/g, "")
                     .replace(/&quot;/g, "")
 
                     .replace(/&amp;/g, "")
@@ -465,13 +466,46 @@ const B2BAutomations = () => {
       ),
     },
     {
-      name: "DHL SHipping Cost",
+      name: "DHL Shipping Cost",
       content: (
         <>
-          <p>Loading...</p>
-          <p>....</p>
-          <p>....</p>
-          <p>....</p>
+          {dhlLoading && <p>Loading DHL invoices...</p>}
+          {dhlError && <p style={{ color: "red" }}>{dhlError}</p>}
+          {!dhlLoading && !dhlError && dhlInvoices.length === 0 && (
+            <p>No DHL invoices found.</p>
+          )}
+          {!dhlLoading && !dhlError && dhlInvoices.length > 0 && (
+            <table style={{ width: "100%", borderCollapse: "collapse" }}>
+              <thead>
+                <tr>
+                  <th style={{ border: "1px solid #ccc", padding: "8px" }}>
+                    Invoice Number
+                  </th>
+                  <th style={{ border: "1px solid #ccc", padding: "8px" }}>
+                    Total Amount
+                  </th>
+                  <th style={{ border: "1px solid #ccc", padding: "8px" }}>
+                    Email Subject
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {dhlInvoices.map((inv, idx) => (
+                  <tr key={idx}>
+                    <td style={{ border: "1px solid #ccc", padding: "8px" }}>
+                      {inv.invoiceNumber}
+                    </td>
+                    <td style={{ border: "1px solid #ccc", padding: "8px" }}>
+                      {inv.totalAmount}
+                    </td>
+                    <td style={{ border: "1px solid #ccc", padding: "8px" }}>
+                      {inv.emailSubject}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
         </>
       ),
     },
